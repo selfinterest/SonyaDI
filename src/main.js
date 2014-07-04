@@ -4,13 +4,15 @@
  * Time: 10:58 PM
  */
 
-var Loader = require("./loader.js")
-    , express = require("express");
+var Loader = require("./loader.js");
 
 function AngularLoader(options){
-
-    return Loader.initialize(options, express.Router());
-
+    Loader
+        .load("expressModule", require("./expressModule.js"))
+        .load("dummyModule", function(){
+            return "I am a dummy module. I do nothing."
+        });
+    return Loader.initialize(options);
 
 }
 

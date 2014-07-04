@@ -6,35 +6,33 @@
 
 "use strict";
 
-var _ = require("underscore");
+var dependencyResolver;
 
-var loader = (function(exports){
-    var self = {};  //private variables
+if(module && exports){
+    dependencyResolver = require("./dependencyResolver.js");
+}
 
-    var DEFAULT_OPTIONS = {
-        resourcePath: "./resources"
+(function(exports){
+    var modules = [], self = {};
+
+    exports.loadModule = function(moduleName, moduleFn){
+        modules.push({name: moduleName, module: moduleFn});
+        return this;
     };
 
-    //Private methods (my bet is that I will be able to straightforwardly replace these private methods for the client side module.)
-    self.initializeRouter = function(router){
-        router.get("/", function(req, res){
-            res.send({ok: true});
-        });
-    };
-
-    exports.resources = {
-        getPath: function(){
-            return self.options.resourcePath;
+    function resolveDependencies(modules, options){
+        if(dependencyResolver){
+            return dependencyResolver.resolve(modules);
+        } else {
+            throw new Error("No suitable method found for resolving dependencies.");
         }
-    };
 
-    exports.initialize =  function(options, router){
-        self.options = options || {};
-        self.options = _.defaults(self.options, DEFAULT_OPTIONS);
 
-        self.initializeRouter(router);
-        return router; //Must return router
-    };
+    }
+
+    exports.initialize =  function(options){
+        return resolveDependencies(self.modules, options);
+    }
 
 })(typeof exports === 'undefined'? this['loader']={}: exports);
 

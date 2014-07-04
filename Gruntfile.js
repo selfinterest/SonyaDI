@@ -23,7 +23,7 @@ module.exports = function(grunt){
                 files: ['src/*.js', 'tests/server/*.js'],
                 tasks: ['default'],
                 options: {
-                    
+                    atBegin: true
                 }
             }
         }

@@ -4,26 +4,53 @@
  * Time: 5:16 PM
  */
 describe("Loader class", function(){
-    var Loader, mockRouter = {};
+    var loader, injector, mockRouter = {};
     beforeEach(function(){
-        Loader = require("../../src/loader.js");
-        mockRouter.get = function(){
-
-        }
+        loader = require("../../src/loader.js");
+        injector = require("../../src/injector.js");
     });
 
     it("should exist", function(){
-        expect(Loader).toBeDefined();
+        expect(loader).toBeDefined();
     });
 
     it("should have an initialization method", function(){
-       expect(typeof Loader.initialize).toBe("function");
+       expect(typeof loader.initialize).toBe("function");
     });
 
-    it("should be configurable through an options object", function(){
+    it("should have a method for loading modules", function(){
+        expect(typeof loader.loadModule).toBe("function");
+    });
+
+
+    it("initialization method should return an injector", function(){
+       var returnedValue = loader.initialize();
+       expect(returnedValue).toBeDefined();       //it hasn't really done anything, but it can be initialized with no dependencies
+       expect(returnedValue instanceof injector.constructor).toBe(true);
+    });
+
+    /*it("should be able to use dependency injection", function(){
+       function testDependency(){
+           return "test";
+       }
+
+       function anotherTestDependency(){
+           return "test2";
+       }
+        loader
+            .loadModule("testDependency1", testDependency)
+            .loadModule("testDependency2", anotherTestDependency);
+
+        var returnedValue = loader.initialize();
+        expect(returnedValue).toBe("test");
+
+    });*/
+
+    /*it("should be configurable through an options object", function(){
+
         Loader.initialize({resourcePath: "/terrence"}, mockRouter);
         expect(Loader.resources.getPath()).toBe("/terrence");
-    })
+    })*/
 
 
     /*it("should be a constructor", function(){
