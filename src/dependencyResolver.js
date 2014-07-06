@@ -70,81 +70,30 @@ DependencyResolver.prototype.resolveModule = function(aModule, modules){
     if(this.moduleHasDependency(aModule)){
         aModule.moduleFunction.dependencyNames.forEach(function(dependencyName){
            var dependencyModule = this.getModuleByName(modules, dependencyName);
+
+           if(!dependencyModule) throw new Error("Dependency module "+dependencyName + " is not defined!");
+           if(!dependencyModule.resolvedValue) throw new Error("Dependency resolution error for "+dependencyModule);
+
            aModule.moduleFunction = Injector.injectDependency(aModule.moduleFunction, dependencyModule.resolvedValue);
         }.bind(this));
     }
 
-    aModule.resolvedValue = aModule.moduleFunction();
+    aModule.resolvedValue = this.registerResolvedModuleWithProvider(aModule);
 
     return aModule;
 }
 
-DependencyResolver.prototype.resolveModulesWithNoDependencies = function(modules){
-    var modulesWithNoDependencies = this.getModulesWithNoDependencies(modules);
-    if(!modulesWithNoDependencies) return;
 
-    modulesWithNoDependencies.forEach(function(aModule){
-        this.markModuleAsResolving(aModule);
-        aModule.resolvedFunction = aModule.moduleFunction;
-        this.markModuleAsResolved(aModule);
-    }.bind(this));
-
-    //return this.getUnresolvedModules(modules);
-
-    //return _.difference(modules, modulesWithNoDependencies)
-}
-
-DependencyResolver.prototype.markModuleAsResolving = function(module){
-    module._resolving = true;
-    module._resolved = false;
-}
-
-DependencyResolver.prototype.markModuleAsResolved = function(module){
-    module._resolving = false;
-    module._resolved = true;
-}
-
-DependencyResolver.prototype.getUnresolvedModules = function(modules){
-
-    return _.filter(modules, function(aModule){
-        return !aModule.resolvedFunction;
-    });
-
-}
-
-DependencyResolver.prototype.getModulesWithNoDependencies = function(modules){
-    var modulesToReturn = [];
-
-
-    modules.forEach(function(aModule){
-        if(!this.moduleHasDependency(aModule)){
-            modulesToReturn.push(aModule);
-        }
-    }.bind(this));
-
-    if(modulesToReturn.length > 0) {
-        return modulesToReturn;
-    } else {
-        return null;
-    }
-}
-
-DependencyResolver.prototype.moduleIsResolving = function(aModule){
-    return aModule._resolving;
-}
 
 DependencyResolver.prototype.moduleHasDependency = function(aModule){
     if(!aModule.moduleFunction.dependencyNames) return false;
     return aModule.moduleFunction.dependencyNames.length != 0;
 
 }
-DependencyResolver.prototype.resolveModulesWithResolvedDependencies = function(modules){
 
+DependencyResolver.prototype.registerResolvedModuleWithProvider = function(aModule){
+
+    if(!aModule.type) return aModule.moduleFunction();
+
+    return aModule.moduleFunction();
 }
-
-
-
-DependencyResolver.prototype.moduleHasResolvedDependencies = function(aModule){
-
-}
-
