@@ -15,8 +15,8 @@ if(module && exports){
 (function(exports){
     var modules = [], self = {};
 
-    exports.loadModule = function(moduleName, moduleFn){
-        modules.push({name: moduleName, module: moduleFn});
+    exports.loadModule = function(moduleName, moduleFunction){
+        modules.push({name: moduleName, moduleFunction: moduleFunction});
         return this;
     };
 

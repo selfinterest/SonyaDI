@@ -3,7 +3,7 @@
  * Date: 6/30/14
  * Time: 5:16 PM
  */
-describe("Loader class", function(){
+xdescribe("Loader class", function(){
     var loader, injector, mockRouter = {};
     beforeEach(function(){
         loader = require("../../src/loader.js");

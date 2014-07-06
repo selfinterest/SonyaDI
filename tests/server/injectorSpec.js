@@ -3,7 +3,7 @@
  * Date: 7/3/14
  * Time: 9:31 PM
  */
-describe("Injector", function(){
+xdescribe("Injector", function(){
     var Injector;
 
     beforeEach(function(){
@@ -31,20 +31,22 @@ describe("Injector", function(){
 
     });
 
-    it("should return a different module if the module has dependencies", function(){
+    xit("should throw an error if the module to be injected has a missing dependency", function(){
         function TestModule(){
 
         }
 
         TestModule.dependencyNames = ["DummyModule"];
+        var result;
 
-        var result = Injector.inject(TestModule, []);
-        expect(result).toBeDefined();
-        //expect(result).not.toBe(TestModule);
+        expect(function(){
+            result = Injector.inject(TestModule, []);
+        }).toThrow("Module DummyModule does not exist or is not loaded.");
+
 
     });
 
-    it("should return a function that when executed returns a value", function(){
+    xit("should return a function that when executed returns a value", function(){
        function TestModule(){
            return "OY";
        }
@@ -52,6 +54,11 @@ describe("Injector", function(){
        var result = Injector.inject(TestModule, []);
        expect(result()).toBe("OY");
 
+    });
+
+    xit("should have a function for determining if a module has already been resolved", function(){
+        var module1 = {name: "Module1", module: function(){}, resolved: function(){}};
+        expect(Injector.moduleIsResolved(module1)).toBe(true);
     });
 
     it("should return a function that when executed returns a value, including a single dependency", function(){
@@ -102,7 +109,7 @@ describe("Injector", function(){
 
         TestModule.dependencyNames = ["Dummy"];
 
-        var result = Injector.inject(TestModule, []);
+        var result = Injector.inject(TestModule, [{name: "Dummy"}]);
         expect(result).toBe(null);
     });
 
