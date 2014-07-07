@@ -5,6 +5,8 @@
  */
 
 var introspect = require("introspect");
+var mixin = require("utils-merge");
+var _ = require("underscore");
 /**
  * Creates the provide service
  * @constructor
@@ -72,18 +74,33 @@ Provide.prototype.types.factory = function(moduleFunction, args){
 }
 
 Provide.prototype.types.service = function(moduleFunction, args){
-    console.log("Making a service");
-    var moduleConstructor = moduleFunction;
-    console.log("Getting service");
+
     return new moduleFunction(args);
-    //return new moduleFunction.apply(moduleFunction, args)
+
 
 }
 
-Provide.prototype.types.class = function(moduleFunction){
-    return function(){
-        return moduleFunction;
+Provide.prototype.types.class = function(moduleFunction, args){
+
+    function create(constructor, moreArgs){
+        moreArgs = _.values(moreArgs);
+        args = _.values(args);
+        var allArguments = args.concat(moreArgs);
+        var object = Object.create(constructor.prototype);
+        var result = constructor.apply(object, allArguments);
+
+        if(typeof result === "object"){
+            return result;
+        } else {
+            return object;
+        }
     }
+
+    return function(){
+        return create(moduleFunction, arguments);
+
+    }
+    //return create.bind(moduleFunction, args moduleFunction(args), args);
 }
 
 module.exports = Provide;

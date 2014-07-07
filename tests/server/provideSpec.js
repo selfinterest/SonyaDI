@@ -130,18 +130,35 @@ describe("Provide", function(){
         }
 
         var seneaService = Provide.service("Senea", SeneaService);
-        var senea = seneaService.$get("cat");
+        senea = seneaService.$get("cat");
 
         expect(senea.name).toBe("Senea");
         expect(SeneaService.resolved).toBe(true);
 
-        //var seneaService = Provide.service("SeneaService", SeneaService);
-        //var senea2 = seneaService.$get();
-        //console.log(senea2);
-        //senea = seneaService.$get()("cat");
-        //console.log(senea);
-        //expect(senea.type).toBe("cat");
-        //console.log(senea);
+        function CatClass(name, sound){
+            this.name = name;
+            this.sound = sound;
+        }
+
+        CatClass = Provide.class("Cat", CatClass);
+        Cat = CatClass.$get();
+        senea = new Cat("Senea", "meow");
+        expect(senea.name).toBe("Senea");
+        expect(senea.sound).toBe("meow");
+
+        //Now try it with partial application
+        Cat = CatClass.$get("Senea", "meow");
+        senea = new Cat();
+        expect(senea.name).toBe("Senea");
+        expect(senea.sound).toBe("meow");
+
+        //Now try it with a mixture
+        Cat = CatClass.$get("Senea");
+        senea = new Cat("meow");
+        expect(senea.name).toBe("Senea");
+        expect(senea.sound).toBe("meow");
+
+
 
     })
 });
