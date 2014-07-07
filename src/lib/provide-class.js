@@ -15,7 +15,7 @@ function Provide(Injector){
 
 
 
-    function makeAFunction(type, allTypes){
+    function makeGetFunction(type, allTypes){
         return function (name, moduleFunction){
             var $inject = getInjectArrayFromModuleFunction(moduleFunction);
             if(!Array.isArray($inject)){
@@ -42,7 +42,7 @@ function Provide(Injector){
         if(Array.isArray(moduleFunction)) {
             return getInjectArrayFromAnnotatedArray(moduleFunction);
         }
-        return [];
+        return []; //return an empty array for no dependencies
         //throw new Error("Could not get $inject array from this module function");
     };
 
@@ -61,7 +61,7 @@ function Provide(Injector){
     }
 
     for(type in this.types){
-        this[type] = makeAFunction(type, this.types);
+        this[type] = makeGetFunction(type, this.types);
     }
 
 

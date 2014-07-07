@@ -141,7 +141,7 @@ describe("Provide", function(){
         }
 
         CatClass = Provide.class("Cat", CatClass);
-        Cat = CatClass.$get();
+        var Cat = CatClass.$get();
         senea = new Cat("Senea", "meow");
         expect(senea.name).toBe("Senea");
         expect(senea.sound).toBe("meow");

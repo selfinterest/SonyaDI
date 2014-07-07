@@ -113,6 +113,108 @@ xdescribe("Injector", function(){
         expect(result).toBe(null);
     });
 
+});
+
+describe("New injector", function(){
+    var Injector;
+
+    beforeEach(function(){
+        Injector = require("../../src/new-injector.js")
+    });
+
+    it("should exist", function(){
+        expect(Injector).toBeDefined();
+    });
+
+    it("should have a map of modules", function(){
+        expect(Injector.moduleMap).toBeDefined();
+    });
+
+    it("should have a way to register modules", function(){
+       expect(Injector.registerModule).toBeDefined();
+    });
+
+    it("should be able to register a module", function(){
+       Injector.registerModule("testModule", function(){});
+        expect(Injector.moduleMap.testModule).toBeDefined();
+    });
+
+    it("should be able to get a preferred dependency resolution order", function(){
+       function TestModuleFunction(){
+
+       }
+
+       function AnotherTestModuleFunction(){
+
+       }
+
+       AnotherTestModuleFunction.$inject = ["testModule"]
+        Injector.registerModule("testModule", TestModuleFunction);
+        Injector.registerModule("anotherTestModule", AnotherTestModuleFunction);
+        var order = Injector.getPreferredDependencyResolutionOrder();
+        expect(order.length).toBe(2);
+        expect(order[0]).toBe("testModule");
+        expect(order[1]).toBe("anotherTestModule");
+
+       function FinalTestModuleFunction(){
+
+       }
+
+       FinalTestModuleFunction.$inject = ["testModule"];
+       AnotherTestModuleFunction.$inject = ["testModule", "finalTestModule"];
+        Injector.registerModule("finalTestModule", FinalTestModuleFunction);
+        order = Injector.getPreferredDependencyResolutionOrder();
+        expect(order.length).toBe(3);
+        expect(order[0]).toBe("testModule");
+        expect(order[1]).toBe("finalTestModule");
+        expect(order[2]).toBe("anotherTestModule");
+    });
+
+    it("should be able to resolve dependencies and instantiate services", function(){
+        function TestModuleFunction(){
+            return "test module";
+        }
+
+        function AnotherTestModuleFunction(testModule, finalTestModule){
+            return testModule + " " + finalTestModule + " another test module";
+        }
+
+        function FinalTestModuleFunction(testModule){
+            return testModule + " final test module";
+        }
+
+        FinalTestModuleFunction.$inject = ["testModule"];
+
+        FinalTestModuleFunction.$get = function(testModule){
+            return FinalTestModuleFunction(testModule);
+        }
+
+        AnotherTestModuleFunction.$get = function(testModule, finalTestModule){
+            return AnotherTestModuleFunction(testModule, finalTestModule);
+        }
+
+        TestModuleFunction.$get = function(){
+            return TestModuleFunction();
+        }
+
+        TestModuleFunction.$inject = [];
+
+        AnotherTestModuleFunction.$inject = ["testModule", "finalTestModule"];
+
+        Injector.registerModule("testModule", TestModuleFunction);
+        Injector.registerModule("anotherTestModule", AnotherTestModuleFunction);
+        Injector.registerModule("finalTestModule", FinalTestModuleFunction);
+
+        var test = Injector.get("testModule");
+
+        expect(test).toBe("test module");
+
+        var anotherTest = Injector.get("anotherTestModule");
+        expect(anotherTest).toBe("test module test module final test module another test module");
+
+        var finalTest = Injector.get("finalTestModule");
+        expect(finalTest).toBe("test module final test module");
 
 
+    });
 });
