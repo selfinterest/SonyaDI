@@ -15,8 +15,9 @@ if(module && exports){
 (function(exports){
     var modules = [], self = {};
 
-    exports.loadModule = function(moduleName, moduleFunction){
-        modules.push({name: moduleName, moduleFunction: moduleFunction});
+    exports.loadModule = function(moduleName, moduleFunction, type){
+        type = type || "factory";
+        modules.push({name: moduleName, moduleFunction: moduleFunction, type: type});
         return this;
     };
 
@@ -31,7 +32,7 @@ if(module && exports){
     }
 
     exports.initialize =  function(options){
-        return resolveDependencies(self.modules, options);
+        return resolveDependencies(modules, options);
     }
 
 })(typeof exports === 'undefined'? this['loader']={}: exports);

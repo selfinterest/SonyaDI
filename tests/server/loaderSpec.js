@@ -3,11 +3,12 @@
  * Date: 6/30/14
  * Time: 5:16 PM
  */
-xdescribe("Loader class", function(){
-    var loader, injector, mockRouter = {};
+describe("Loader class", function(){
+    var loader, injector, Provider, mockRouter = {};
     beforeEach(function(){
         loader = require("../../src/loader.js");
         injector = require("../../src/injector.js");
+        Provider = require("../../src/provider.js");
     });
 
     it("should exist", function(){
@@ -23,11 +24,21 @@ xdescribe("Loader class", function(){
     });
 
 
-    it("initialization method should return an injector", function(){
-       var returnedValue = loader.initialize();
-       expect(returnedValue).toBeDefined();       //it hasn't really done anything, but it can be initialized with no dependencies
-       expect(returnedValue instanceof injector.constructor).toBe(true);
+    it("initialization method should throw an error if no modules are loaded", function(){
+       expect(function(){
+           loader.initialize();
+       }).toThrow();
+       //expect(returnedValue).toBeDefined();       //it hasn't really done anything, but it can be initialized with no dependencies
+       //expect(returnedValue instanceof Provider.constructor).toBe(true);
     });
+
+    it("initialization method should return the array of modules if modules are loaded", function(){
+        var result = loader
+            .loadModule("TestModule", function(){})
+            .loadModule("TestModule2", function(){})
+            .initialize();
+
+    })
 
     /*it("should be able to use dependency injection", function(){
        function testDependency(){

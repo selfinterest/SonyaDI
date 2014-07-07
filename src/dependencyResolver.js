@@ -5,6 +5,7 @@
  */
 
 var Injector = require("./injector.js");
+var Provider = require("./provider.js");
 var _ = require("underscore");
 var toposort = require("toposort");
 
@@ -18,6 +19,8 @@ function DependencyResolver(){
 
 DependencyResolver.prototype.resolve = function(modules){
     var moduleDependencyResolutionOrder, aModule;
+    modules = modules || [];
+    if(modules.length < 1) throw new Error("The resolver must be given an array of modules");
     try {
         moduleDependencyResolutionOrder = this.getBestDependencyResolutionOrder(modules);
         moduleDependencyResolutionOrder.forEach(function(moduleName){
@@ -92,8 +95,5 @@ DependencyResolver.prototype.moduleHasDependency = function(aModule){
 }
 
 DependencyResolver.prototype.registerResolvedModuleWithProvider = function(aModule){
-
-    if(!aModule.type) return aModule.moduleFunction();
-
-    return aModule.moduleFunction();
+    return Provider.register(aModule);
 }

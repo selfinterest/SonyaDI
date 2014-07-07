@@ -5,15 +5,21 @@
  */
 
 var Loader = require("./loader.js");
+var Provider = require("./provider.js");
 
 function AngularLoader(options){
     Loader
-        .load("expressModule", require("./expressModule.js"))
-        .load("dummyModule", function(){
+        .loadModule("ExpressModule", require("./expressModule.js"))
+        .loadModule("AngularModule", require("./angularModule.js"))
+        .loadModule("dummyModule", function(){
             return "I am a dummy module. I do nothing."
-        });
-    return Loader.initialize(options);
+        })
+        .initialize();
 
+    var v = Provider.getByName("AngularModule");
+    console.log(v);
+
+    return v;
 }
 
 module.exports = AngularLoader;

@@ -4,8 +4,22 @@
  * Time: 5:01 PM
  */
 
+/**
+ * Creates a provider
+ * @constructor
+ */
 function Provider(){
     this.providerMap = {};
+}
+
+/**
+ *
+ * @param {string} type
+ * @param {{name: string, moduleFunction: function}} module
+ */
+Provider.prototype.provide = function(type, module){
+    if(!this.types[type]) throw new Error("Provider type "+type+ " is not registered.");
+
 }
 
 Provider.prototype.types = {};
@@ -49,6 +63,12 @@ Provider.prototype.register = function(theResolvedModule){
 
 
 Provider.prototype.getByName = function(providerName, optionalModule){
+
     return this.providerMap[providerName] ? this.providerMap[providerName](optionalModule) : null;
 }
+
+Provider.prototype.get = function(providerName){
+    return this.providerMap[providerName] ? this.providerMap[providerName](): null;
+}
+
 module.exports = new Provider();
