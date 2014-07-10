@@ -170,17 +170,87 @@ describe("New injector", function(){
         expect(order[2]).toBe("anotherTestModule");
     });
 
-    it("should be able to resolve dependencies and instantiate services", function(){
+    it("should have a method to resolve a module with no dependencies", function(){
         function TestModuleFunction(){
             return "test module";
         }
 
+        TestModuleFunction.$inject = [];
+        TestModuleFunction.$get = function(){
+            return TestModuleFunction();
+        }
+
+        var result = Injector.resolve(TestModuleFunction, {});
+        expect(result()).toBe("test module");
+        expect(result()).toEqual(TestModuleFunction.$get());
+        expect(TestModuleFunction._resolved).toEqual(TestModuleFunction.$get());
+        expect(TestModuleFunction._resolved).toEqual(result());
+        expect(TestModuleFunction._resolved).toEqual("test module");
+
+    });
+
+    it("should have a method to resolve a module with a single dependency", function(){
+        function TestModuleFunction(){
+            return "The first module";
+        }
+
+        TestModuleFunction.$inject = [];
+
+        TestModuleFunction.$get = function(){
+            return TestModuleFunction();
+        }
+
+        function AnotherTestModule(testModule){
+            return testModule + " and the second module";
+        }
+
+        AnotherTestModule.$inject = ["TestModuleFunction"];
+
+        AnotherTestModule.$get = function(){
+            return AnotherTestModule.apply(AnotherTestModule, arguments);
+        }
+
+        var result = Injector.resolve(AnotherTestModule, {"TestModuleFunction": TestModuleFunction});
+        expect(result()).toBe("The first module and the second module");
+    });
+
+    xit("should have a method to resolve a module with a single dependency, using a $get function", function(){
+       function TestModuleFunction(){
+            return "test module";
+       }
+
+       function AnotherTestModule(testModule){
+            return "another test module "+testModule;
+       }
+
+        TestModuleFunction.$inject = [];
+
+        AnotherTestModule.$inject = [TestModuleFunction];
+
+        AnotherTestModule.$get = function(fn){
+            console.log(fn);
+            return fn;
+        }
+
+        TestModuleFunction.$get = function(){
+            return TestModuleFunction();
+        }
+
+        var result = Injector.resolve(AnotherTestModule, [TestModuleFunction]);
+        expect(result).toBe("another test module test module");
+    });
+
+    xit("should be able to resolve dependencies and instantiate services", function(){
+        function TestModuleFunction(){
+            return "test module return value";
+        }
+
         function AnotherTestModuleFunction(testModule, finalTestModule){
-            return testModule + " " + finalTestModule + " another test module";
+            return testModule + " " + finalTestModule + " another test module return value";
         }
 
         function FinalTestModuleFunction(testModule){
-            return testModule + " final test module";
+            return testModule + " final test module return value";
         }
 
         FinalTestModuleFunction.$inject = ["testModule"];
@@ -207,14 +277,14 @@ describe("New injector", function(){
 
         var test = Injector.get("testModule");
 
-        expect(test).toBe("test module");
+        expect(test).toBe("test module return value");
 
         var anotherTest = Injector.get("anotherTestModule");
-        expect(anotherTest).toBe("test module test module final test module another test module");
+        expect(anotherTest).toBe("test module return value test module return value final test module return value another test module return value");
 
         var finalTest = Injector.get("finalTestModule");
-        expect(finalTest).toBe("test module final test module");
-
+        expect(finalTest).toBe("test module return value final test module return value");
 
     });
+
 });

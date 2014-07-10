@@ -30,7 +30,7 @@ function Provide(Injector){
                 return allTypes[type](moduleFunction, arguments);
             }
 
-            Injector.register(name, moduleFunction);
+            Injector.registerModule(name, moduleFunction);
 
             return moduleFunction;
         }
@@ -60,8 +60,26 @@ function Provide(Injector){
         };
     }
 
-    for(type in this.types){
-        this[type] = makeGetFunction(type, this.types);
+    var self = this;
+    for(var type in this.types){
+        //this[type] = makeGetFunction(type, this.types);
+        this[type] = function(name, moduleFunction){
+            var $inject = getInjectArrayFromModuleFunction(moduleFunction);
+            if(!Array.isArray($inject)){
+                moduleFunction = $inject.moduleFunction;
+                moduleFunction.$inject = $inject.$inject;
+            } else {
+                moduleFunction.$inject = $inject;
+            }
+
+            moduleFunction.$get = function(){
+                return self.types[type].apply(moduleFunction, _.toArray(arguments));
+                /*moduleFunction.resolved = true;
+                return allTypes[type](moduleFunction, arguments);*/
+            }
+            moduleFunction.$type = type;
+            Injector.registerModule(name, moduleFunction);
+        }
     }
 
 
@@ -71,6 +89,7 @@ Provide.prototype.types = {};
 
 Provide.prototype.types.factory = function(moduleFunction, args){
         return moduleFunction.apply(moduleFunction, args);
+        //return moduleFunction.apply(moduleFunction, args);
 }
 
 Provide.prototype.types.service = function(moduleFunction, args){

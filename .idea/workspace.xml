@@ -23,13 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="injectorSpec.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="injectorSpec.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/server/injectorSpec.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="212" column="58" selection-start="6354" selection-end="6354" vertical-scroll-proportion="0.80932206" vertical-offset="957" max-vertical-offset="1725">
-              <folding>
-                <element signature="e#107#3108#0" expanded="false" />
-              </folding>
+            <state line="210" column="9" selection-start="6216" selection-end="6216" vertical-scroll-proportion="0.0" vertical-offset="2470" max-vertical-offset="4425">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -37,10 +35,8 @@
       <file leaf-file-name="topographic.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lib/topographic.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="0" selection-start="103" selection-end="103" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="135">
-              <folding>
-                <element signature="e#0#74#0" expanded="false" />
-              </folding>
+            <state line="6" column="0" selection-start="103" selection-end="103" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="195">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -57,10 +53,8 @@
       <file leaf-file-name="provider.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/provider.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="0" selection-start="76" selection-end="171" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1185">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state line="6" column="0" selection-start="76" selection-end="171" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1185">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -68,7 +62,7 @@
       <file leaf-file-name="providerSpec.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/server/providerSpec.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="6" selection-start="78" selection-end="210" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1980">
+            <state line="20" column="0" selection-start="394" selection-end="394" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1980">
               <folding />
             </state>
           </provider>
@@ -77,18 +71,16 @@
       <file leaf-file-name="angularModule.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/angularModule.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="50" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
-              <folding>
-                <element signature="n#!!doc;n#AngularModule#0" expanded="false" />
-              </folding>
+            <state line="15" column="50" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="345">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="new-injector.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="new-injector.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/new-injector.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="71" selection-start="1765" selection-end="1765" vertical-scroll-proportion="0.0" vertical-offset="312" max-vertical-offset="2055">
+            <state line="175" column="0" selection-start="5569" selection-end="5569" vertical-scroll-proportion="0.7245763" vertical-offset="2052" max-vertical-offset="4230">
               <folding>
                 <element signature="e#0#74#0" expanded="false" />
               </folding>
@@ -99,10 +91,8 @@
       <file leaf-file-name="new-provider.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/new-provider.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="37" selection-start="202" selection-end="202" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="165">
-              <folding>
-                <element signature="e#0#74#0" expanded="false" />
-              </folding>
+            <state line="9" column="37" selection-start="202" selection-end="202" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -110,10 +100,8 @@
       <file leaf-file-name="provide-class.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lib/provide-class.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="62" selection-start="1455" selection-end="1455" vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="1605">
-              <folding>
-                <element signature="e#0#74#0" expanded="false" />
-              </folding>
+            <state line="79" column="16" selection-start="2768" selection-end="2768" vertical-scroll-proportion="0.0" vertical-offset="897" max-vertical-offset="1950">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -121,11 +109,8 @@
       <file leaf-file-name="provideSpec.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/server/provideSpec.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2475">
-              <folding>
-                <element signature="e#0#74#0" expanded="false" />
-                <marker date="1404714343155" expanded="true" signature="105:4755" placeholder="{...}" />
-              </folding>
+            <state line="16" column="7" selection-start="353" selection-end="353" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2955">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -149,7 +134,6 @@
         <option value="$PROJECT_DIR$/src/lib/topographic.js" />
         <option value="$PROJECT_DIR$/src/injector.js" />
         <option value="$PROJECT_DIR$/tests/server/dependencyResolverSpec.js" />
-        <option value="$PROJECT_DIR$/tests/server/providerSpec.js" />
         <option value="$PROJECT_DIR$/src/dependencyResolver.js" />
         <option value="$PROJECT_DIR$/tests/server/loaderSpec.js" />
         <option value="$PROJECT_DIR$/src/loader.js" />
@@ -160,10 +144,11 @@
         <option value="$PROJECT_DIR$/src/provider.js" />
         <option value="$PROJECT_DIR$/src/new-provider.js" />
         <option value="$PROJECT_DIR$/Gruntfile.js" />
-        <option value="$PROJECT_DIR$/tests/server/provideSpec.js" />
         <option value="$PROJECT_DIR$/src/lib/provide-class.js" />
-        <option value="$PROJECT_DIR$/src/new-injector.js" />
+        <option value="$PROJECT_DIR$/tests/server/providerSpec.js" />
+        <option value="$PROJECT_DIR$/tests/server/provideSpec.js" />
         <option value="$PROJECT_DIR$/tests/server/injectorSpec.js" />
+        <option value="$PROJECT_DIR$/src/new-injector.js" />
       </list>
     </option>
   </component>
@@ -309,7 +294,7 @@
     <property name="JavaScriptLanguageLevel" value="ES5" />
     <property name="JavaScriptPreferStrict" value="false" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
-    <property name="options.lastSelected" value="settings.nodejs" />
+    <property name="options.lastSelected" value="reference.idesettings.emmet" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
@@ -368,7 +353,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27272728" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28246754" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.09247028" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -426,9 +411,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/tests/server/dependencyResolverSpec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="7" selection-start="1847" selection-end="1847" vertical-scroll-proportion="0.0" vertical-offset="302" max-vertical-offset="1545">
-          <folding />
-        </state>
+        <state line="58" column="7" selection-start="1847" selection-end="1847" vertical-scroll-proportion="0.0" vertical-offset="302" max-vertical-offset="1545" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/injector.js">
@@ -464,9 +447,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/loader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="19" selection-start="507" selection-end="507" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="690">
-          <folding />
-        </state>
+        <state line="24" column="19" selection-start="507" selection-end="507" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="690" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/dependencyResolver.js">
@@ -478,9 +459,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/server/dependencyResolverSpec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="53" selection-start="669" selection-end="669" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="540">
-          <folding />
-        </state>
+        <state line="19" column="53" selection-start="669" selection-end="669" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="540" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/server/injectorSpec.js">
@@ -546,9 +525,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/loader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="25" selection-start="570" selection-end="570" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="720">
-          <folding />
-        </state>
+        <state line="24" column="25" selection-start="570" selection-end="570" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="720" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/server/loaderSpec.js">
@@ -616,9 +593,7 @@
     <entry file="file://$PROJECT_DIR$/src/lib/topographic.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="0" selection-start="103" selection-end="103" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="135">
-          <folding>
-            <element signature="e#0#74#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -631,16 +606,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/loader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="361" selection-end="361" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705">
-          <folding />
-        </state>
+        <state line="19" column="0" selection-start="361" selection-end="361" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/server/dependencyResolverSpec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="160" column="38" selection-start="5514" selection-end="5514" vertical-scroll-proportion="0.0" vertical-offset="1812" max-vertical-offset="2610">
-          <folding />
-        </state>
+        <state line="160" column="38" selection-start="5514" selection-end="5514" vertical-scroll-proportion="0.0" vertical-offset="1812" max-vertical-offset="2610" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/injector.js">
@@ -652,16 +623,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="17" selection-start="541" selection-end="541" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
-          <folding />
-        </state>
+        <state line="19" column="17" selection-start="541" selection-end="541" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/expressModule.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="170" selection-end="170" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
-          <folding />
-        </state>
+        <state line="11" column="0" selection-start="170" selection-end="170" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
@@ -673,9 +640,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Gruntfile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="52" selection-start="581" selection-end="581" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
-          <folding />
-        </state>
+        <state line="22" column="52" selection-start="581" selection-end="581" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/dependencyResolver.js">
@@ -688,25 +653,6 @@
     <entry file="file://$PROJECT_DIR$/src/provider.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="0" selection-start="76" selection-end="171" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1185">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/server/provideSpec.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2475">
-          <folding>
-            <element signature="e#0#74#0" expanded="false" />
-            <marker date="1404714343155" expanded="true" signature="105:4755" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/server/providerSpec.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="6" selection-start="78" selection-end="210" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1980">
           <folding />
         </state>
       </provider>
@@ -714,44 +660,50 @@
     <entry file="file://$PROJECT_DIR$/src/angularModule.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="50" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
-          <folding>
-            <element signature="n#!!doc;n#AngularModule#0" expanded="false" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lib/provide-class.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="16" selection-start="2768" selection-end="2768" vertical-scroll-proportion="0.0" vertical-offset="897" max-vertical-offset="1950">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/new-provider.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="37" selection-start="202" selection-end="202" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="165">
-          <folding>
-            <element signature="e#0#74#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lib/provide-class.js">
+    <entry file="file://$PROJECT_DIR$/tests/server/providerSpec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="62" selection-start="1455" selection-end="1455" vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="1605">
-          <folding>
-            <element signature="e#0#74#0" expanded="false" />
-          </folding>
+        <state line="20" column="0" selection-start="394" selection-end="394" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1980">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/new-injector.js">
+    <entry file="file://$PROJECT_DIR$/tests/server/provideSpec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="71" selection-start="1765" selection-end="1765" vertical-scroll-proportion="0.0" vertical-offset="312" max-vertical-offset="2055">
-          <folding>
-            <element signature="e#0#74#0" expanded="false" />
-          </folding>
+        <state line="16" column="7" selection-start="353" selection-end="353" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2955">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/server/injectorSpec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="212" column="58" selection-start="6354" selection-end="6354" vertical-scroll-proportion="0.80932206" vertical-offset="957" max-vertical-offset="1725">
+        <state line="210" column="9" selection-start="6216" selection-end="6216" vertical-scroll-proportion="0.0" vertical-offset="2830" max-vertical-offset="4425">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/new-injector.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="175" column="0" selection-start="5569" selection-end="5569" vertical-scroll-proportion="0.7245763" vertical-offset="2052" max-vertical-offset="4230">
           <folding>
-            <element signature="e#107#3108#0" expanded="false" />
+            <element signature="e#0#74#0" expanded="false" />
           </folding>
         </state>
       </provider>

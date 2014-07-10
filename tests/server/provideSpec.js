@@ -3,9 +3,9 @@
  * Date: 7/6/14
  * Time: 5:42 PM
  */
-describe("Provide", function(){
+xdescribe("Provide", function(){
     var Provide, ProvideClass, Injector = {
-        register: function(){
+        registerModule: function(){
 
         }
     }
@@ -87,13 +87,13 @@ describe("Provide", function(){
 
         }
 
-        spyOn(Injector, "register").andCallThrough();
+        spyOn(Injector, "registerModule").andCallThrough();
 
         var service = Provide.service("testService", testFunction);
-        expect(Injector.register).toHaveBeenCalledWith("testService", testFunction);
+        expect(Injector.registerModule).toHaveBeenCalledWith("testService", testFunction);
 
         var factory = Provide.factory("testFactory", testFunction);
-        expect(Injector.register).toHaveBeenCalledWith("testFactory", testFunction);
+        expect(Injector.registerModule).toHaveBeenCalledWith("testFactory", testFunction);
 
         expect(service.$get).toBeDefined();
         expect(service.$inject).toBeDefined();
@@ -158,7 +158,35 @@ describe("Provide", function(){
         expect(senea.name).toBe("Senea");
         expect(senea.sound).toBe("meow");
 
+    });
+    xit("should be able to provide components with dependencies and have the dependency relationships resolved", function(){
+       Injector = require("../../src/new-injector.js");
+       Provide = new ProvideClass(Injector);
+       Provide.service("engine", function(version){
+          this.power = version === 1 ? 100 : 50;
+          this.turnOn = function(){
+              console.log("The engine is turned on, running at "+this.power);
+          }
+       });
+       Provide.factory("version", function(){
+           return 1;
+       });
+
+       Provide.service("car", function(engine){
+          this.engine = engine;
+          this.make = "Toyota";
+          this.model = "corolla";
+       });
+
+       Provide.factory("vehicle", function(car){
+          console.log(car);
+          car.owner = "Terrence";
+          car.engine.turnOn();
+          return "This car is a " + car.make + " " + car.model + ". It belongs to "+car.owner;
+       });
 
 
-    })
+       var vehicle = Injector.get("vehicle");
+       console.log(vehicle);
+    });
 });
