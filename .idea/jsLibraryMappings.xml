@@ -3,7 +3,6 @@
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$" libraries="{Node.js Dependencies for DynamicAngularLoader}" />
     <file url="file://$PROJECT_DIR$/public" libraries="{Angular}" />
-    <file url="file://$PROJECT_DIR$/tests/server/providerSpec.js" libraries="{Node.js v0.10.26 Core Modules}" />
     <file url="PROJECT" libraries="{Jasmine, Node.js v0.10.29 Core Modules}" />
     <includedPredefinedLibrary name="Node.js Globals" />
   </component>

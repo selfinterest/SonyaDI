@@ -5,6 +5,6 @@
  */
 
 var Provide = require("./lib/provide-class");
-var Injector = require("./new-injector");
+var Injector = require("./injector");
 
 module.exports = new Provide(Injector);
