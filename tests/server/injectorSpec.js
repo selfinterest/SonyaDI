@@ -212,7 +212,105 @@ describe("New injector", function(){
 
         var result = Injector.resolve(AnotherTestModule, {"TestModuleFunction": TestModuleFunction});
         expect(result()).toBe("The first module and the second module");
+        expect(result()).toEqual(AnotherTestModule.$get());
+        expect(result()).toEqual(AnotherTestModule._resolved);
+        expect(AnotherTestModule._resolved).toEqual("The first module and the second module");
     });
+
+    describe("Sophisticated DI tests", function(){
+        var modules;
+        Injector = require("../../src/new-injector.js")
+        beforeEach(function(){
+           modules = {};
+            Injector.clearModules();
+            function FirstModuleFunction(){
+                return "The first module";
+            }
+            FirstModuleFunction.$inject = [];
+            FirstModuleFunction.$get = function(){
+                return FirstModuleFunction();
+            }
+
+            function SecondModuleFunction(firstModule){
+                return firstModule + " and the second module";
+            }
+
+            SecondModuleFunction.$inject = ["FirstModuleFunction"];
+
+            SecondModuleFunction.$get = function(){
+                return SecondModuleFunction.apply(SecondModuleFunction, arguments);
+            }
+
+            function ThirdModuleFunction(firstModule, secondModule){
+                return firstModule + " and " + secondModule + " and the third module";
+            }
+
+
+            ThirdModuleFunction.$inject = ["FirstModuleFunction", "SecondModuleFunction"];
+
+            ThirdModuleFunction.$get = function(){
+                return ThirdModuleFunction.apply(ThirdModuleFunction, arguments);
+            }
+
+            modules.firstModule = FirstModuleFunction;
+            modules.secondModule = SecondModuleFunction;
+            modules.thirdModule = ThirdModuleFunction;
+        });
+
+
+        it("should have a method to resolve a module with two dependencies", function(){
+            /*function FirstModuleFunction(){
+             return "The first module";
+             }
+             FirstModuleFunction.$inject = [];
+             FirstModuleFunction.$get = function(){
+             return FirstModuleFunction();
+             }
+
+             function SecondModuleFunction(firstModule){
+             return firstModule + " and the second module";
+             }
+
+             SecondModuleFunction.$inject = ["FirstModuleFunction"];
+
+             SecondModuleFunction.$get = function(){
+             return SecondModuleFunction.apply(SecondModuleFunction, arguments);
+             }
+
+             function ThirdModuleFunction(firstModule, secondModule){
+             return firstModule + " and " + secondModule + " and the third module";
+             }
+
+
+             ThirdModuleFunction.$inject = ["FirstModuleFunction", "SecondModuleFunction"];
+
+             ThirdModuleFunction.$get = function(){
+             return ThirdModuleFunction.apply(ThirdModuleFunction, arguments);
+             }*/
+
+            var result = Injector.resolve(modules.secondModule, {"FirstModuleFunction": modules.firstModule});
+            expect(result()).toBe("The first module and the second module");
+            result = Injector.resolve(modules.thirdModule, {"FirstModuleFunction": modules.firstModule, "SecondModuleFunction": modules.secondModule});
+            var resultShouldBe = "The first module and The first module and the second module and the third module";
+            expect(result()).toBe(resultShouldBe);
+        });
+
+        it("should have a method for getting a registered service or factory", function(){
+            Injector
+                .registerModule("FirstModuleFunction", modules.firstModule)
+                .registerModule("SecondModuleFunction", modules.secondModule)
+                .registerModule("ThirdModuleFunction", modules.thirdModule);
+
+            var FirstModuleReturnValue = Injector.get("FirstModuleFunction");
+            expect(FirstModuleReturnValue).toBe("The first module");
+            var SecondModuleReturnValue = Injector.get("SecondModuleFunction");
+            expect(SecondModuleReturnValue).toBe("The first module and the second module");
+            var ThirdModuleReturnValue = Injector.get("ThirdModuleFunction");
+
+
+        });
+    })
+
 
     xit("should have a method to resolve a module with a single dependency, using a $get function", function(){
        function TestModuleFunction(){

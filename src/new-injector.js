@@ -16,7 +16,14 @@ function Injector(){
 
 Injector.prototype.registerModule = function(name, aModule){
     //if(this.instantiated) throw new Error("No modules can be registered after injector is instantiated.");
+
     this.moduleMap[name] = aModule;
+    return this;
+}
+
+Injector.prototype.clearModules = function(){
+    this.moduleMap = {};
+    this.instantiated = false;
 }
 
 Injector.prototype.inject = function(aModule){
@@ -65,89 +72,20 @@ Injector.prototype.get = function(moduleName){
     this.instantiate();
 
     var aModule = this.moduleMap[moduleName];
-    this.resolve(aModule);
+    var dependencyMap = {};
+    var moduleDependencies = this.findAllModuleDependencies(moduleName);
+    moduleDependencies = aModule.$inject;
+    console.log("This module's dependencies are: ");
+    console.log(moduleDependencies);
 
+    moduleDependencies.forEach(function(dependencyName){
+        dependencyMap[dependencyName] = this.moduleMap[dependencyName];
+    }.bind(this));
+    aModule.$get = this.resolve(aModule, dependencyMap);
 
-    console.log("module:");
-    console.log(aModule);
-
-    if(aModule.$inject.length == 0){
-        var returnValue = aModule.$get();
-        console.log("Return value: "+returnValue);
-        return returnValue;
-    }
-
-    var dependencyNames = this.findAllModuleDependencies(aModule);
-
-    aModule.$inject = _.union(aModule.$inject, dependencyNames);
-
-    var dependencies = [];
-
-    for(var i = 0; i < aModule.$inject.length && aModule.$inject.length > 0; i++){
-        var dependencyName = aModule.$inject[i];
-        console.log("Resolving "+dependencyName+" for "+moduleName);
-        var dependency = this.get(dependencyName);
-        console.log("Dependency is: ");
-        console.log(dependency);
-        dependencies.push(this.get(dependencyName));
-        aModule.$inject = _.without(aModule.$inject, dependencyName);
-
-        //dependencies[dependencyName] = this.get(dependencyName);
-    }
-    console.log("Resolved dependencies");
-    console.log(dependencies);
-    aModule.$get = aModule.$get.bind(aModule, dependencies);
-    /*var dependencies = {};
-
-    dependencyNames.forEach(function(dependencyName){
-        dependencies[dependencyName] = this.get(dependencyName);
-        //Remove the dependency from the list
-
-        aModule.$inject = _.without(aModule.$inject, dependencyName);
-
-    }.bind(this));*/
-
-    //console.log("Dependency map: ");
-    //console.log(dependencies);
-    //aModule.$get = aModule.$get.bind(dependencies);
     return aModule.$get();
 
-    /*if(aModule.resolved) {
-        console.log("Module was already resolved. Returning: "+aModule.$get());
-        return aModule.$get();
-    }*/
 
-    //console.log("Module was not already resolved. Resolving.");
-
-
-    //if(aModule.$inject.length == 0) {
-
-    //    aModule.resolved = true;
-    //    console.log(moduleName + " had no dependencies. Returning "+aModule.$get());
-    //    return this.get(moduleName);
-    //}
-
-
-    /*var dependencyNames = this.findAllModuleDependencies(aModule);
-
-    console.log("Module had dependencies. They are: ");
-    console.log(dependencyNames);
-
-    dependencyNames.forEach(function(dependencyName){
-        console.log("Attempting to resolve "+dependencyName +" for "+moduleName);
-        var dependency = this.moduleMap[dependencyName];
-        if(!dependency.resolved) {
-            console.log("Resolving "+dependencyName+ " for "+moduleName);
-            this.moduleMap[dependencyName].$get = this.inject(this.moduleMap[dependencyName]);
-        } else {
-            console.log(dependencyName + " was already resolved");
-        }
-
-    }.bind(this));
-
-    console.log("Injecting "+moduleName);
-    aModule.$get = this.inject(aModule, dependencyNames);
-    return aModule.$get();*/
 }
 
 /**
@@ -159,51 +97,22 @@ Injector.prototype.get = function(moduleName){
 Injector.prototype.resolve = function(aModule, dependencyMap){
     var i, resolved = [];
 
-    if(aModule.$inject.length < 1) {
-        aModule._resolved = aModule.$get();
-
-    } else {
-        var dependency = dependencyMap[aModule.$inject[0]];
-        dependency.$get = this.resolve(dependency, dependencyMap);
 
 
+    aModule.$inject.forEach(function(dependencyName){
+        var dependency = dependencyMap[dependencyName];
+        if(!dependency._resolved){
+            dependency.$get = this.resolve(dependency, dependencyMap);
+            dependency._resolved = dependency.$get();
+        }
 
-        //RESOLVE DEPENDENCY
-        dependency._resolved = dependency.$get();
         aModule.$get = aModule.$get.bind(aModule, dependency._resolved);
-        aModule._resolved = aModule.$get();
+    }.bind(this));
 
 
-    }
-
+    aModule._resolved = aModule.$get();
     return aModule.$get;
-    //By this point, aModule should have $get and $inject properties
 
-
-
-/*    if(aModule.$get){
-        if(aModule.$inject.length > 0){
-            for(i = 0; i < aModule.$inject.length; i++){
-                resolved.push(this.resolve(dependencies[i]));
-                aModule.$get = aModule.$get.bind.apply(aModule, resolved);
-            }
-
-            return aModule.$get();
-        } else {
-            return aModule.$get();
-        }
-    } else {
-        if(aModule.$inject.length > 0){
-            for(i = 0; i < aModule.$inject.length; i++){
-                resolved.push(this.resolve(dependencies[i]));
-                //aModule.$get = aModule.$get.bind(aModule, resolved);
-            }
-            return aModule.apply(aModule, resolved);
-        } else {
-            return aModule();
-        }
-
-    }*/
 
 }
 
@@ -215,8 +124,11 @@ Injector.prototype.instantiate = function(){
 }
 
 Injector.prototype.findAllModuleDependencies = function(moduleName){
-    console.log(this.resolutionOrder);
-    return this.resolutionOrder.slice(0, this.resolutionOrder.indexOf(moduleName)) || [];
+    //if(moduleName.$inject.length < 1) return [];
+    //console.log(this.resolutionOrder);
+    var moduleIndex = this.resolutionOrder.indexOf(moduleName);
+    return this.resolutionOrder.slice(0, moduleIndex - 1);
+    //return _.union(this.resolutionOrder, moduleName.$inject) || [];
 }
 
 

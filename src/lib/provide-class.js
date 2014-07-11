@@ -30,6 +30,7 @@ function Provide(Injector){
                 return allTypes[type](moduleFunction, arguments);
             }
 
+
             Injector.registerModule(name, moduleFunction);
 
             return moduleFunction;
@@ -62,8 +63,8 @@ function Provide(Injector){
 
     var self = this;
     for(var type in this.types){
-        //this[type] = makeGetFunction(type, this.types);
-        this[type] = function(name, moduleFunction){
+        this[type] = makeGetFunction(type, this.types);
+        /*this[type] = function(name, moduleFunction){
             var $inject = getInjectArrayFromModuleFunction(moduleFunction);
             if(!Array.isArray($inject)){
                 moduleFunction = $inject.moduleFunction;
@@ -76,10 +77,12 @@ function Provide(Injector){
                 return self.types[type].apply(moduleFunction, _.toArray(arguments));
                 /*moduleFunction.resolved = true;
                 return allTypes[type](moduleFunction, arguments);*/
-            }
-            moduleFunction.$type = type;
-            Injector.registerModule(name, moduleFunction);
-        }
+            //}
+           // moduleFunction.$type = type;
+            //console.log("Registering a "+type)
+            //console.log("Registering");
+            //Injector.registerModule(name, moduleFunction);
+        //}
     }
 
 

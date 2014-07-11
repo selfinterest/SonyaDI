@@ -3,10 +3,10 @@
  * Date: 7/6/14
  * Time: 5:42 PM
  */
-xdescribe("Provide", function(){
+describe("Provide", function(){
     var Provide, ProvideClass, Injector = {
         registerModule: function(){
-
+            console.log("REGISTERING REGISTERING")
         }
     }
 
@@ -21,68 +21,8 @@ xdescribe("Provide", function(){
        expect(Provide.service).toBeDefined();
     });
 
-    xit("should have methods for inferring $inject array from function declaration", function(){
-       function DogCatName (dog, cat, name){
 
-       }
-       var result = Provide.inferInjectArrayFromModuleFunctionParameters(DogCatName);
-       expect(result[0]).toBe("dog");
-       expect(result.length).toBe(3);
-    });
-
-    xit("should have methods for getting the inject array from an angular-style annotated array", function(){
-        var array = [
-        "dog",
-        "cat",
-        "name",
-        function(dog, cat, name){
-
-        }
-        ];
-
-        var result = Provide.getInjectArrayFromAnnotatedArray(array);
-        expect(result.$inject).toBeDefined();
-        expect(result.$inject.length).toBe(3);
-        expect(result.moduleFunction).toBeDefined();
-        expect(typeof result.moduleFunction).toBe("function");
-    });
-
-    xit("should have a method for getting the inject array from any valid module configuration", function(){
-        var array = [
-            "dog",
-            "cat",
-            "name",
-            function(dog, cat, name){
-
-            }
-        ];
-
-        function DogCatName (dog, cat, name){
-
-        }
-
-        function InjectedFunction(){
-
-        }
-
-        InjectedFunction.$inject = ["dog", "cat"];
-
-        var result;
-
-
-
-        /*result = Provide.getInjectArrayFromModuleFunction(InjectedFunction);
-        expect(result.length).toBe(2);
-
-        result = Provide.getInjectArrayFromModuleFunction(DogCatName);
-        expect(result.length).toBe(3);
-
-        result = Provide.getInjectArrayFromModuleFunction(array);
-        expect(result.$inject.length).toBe(3);*/
-
-    });
-
-    it("should be able to provide factories and other things to the injector", function(){
+    xit("should be able to provide factories and other things to the injector", function(){
         function testFunction(){
 
         }
@@ -159,15 +99,76 @@ xdescribe("Provide", function(){
         expect(senea.sound).toBe("meow");
 
     });
+    describe("Tests with the real injector", function(){
+        var modules = {}, RealInjector
+        beforeEach(function(){
+            RealInjector = require("../../src/new-injector.js");
+            RealInjector.clearModules();
+            Provide = new ProvideClass(RealInjector);
+            //modules = {};
+            //Injector.clearModules();
+
+            function firstModule(){
+                return "The first module";
+            }
+
+            //FirstModuleFunction.$inject = [];
+            //FirstModuleFunction.$get = function(){
+            //     return FirstModuleFunction();
+            //}
+
+            function secondModule(firstModule){
+                return firstModule + " and the second module";
+            }
+
+            //SecondModuleFunction.$inject = ["FirstModuleFunction"];
+
+            //SecondModuleFunction.$get = function(){
+            //    return SecondModuleFunction.apply(SecondModuleFunction, arguments);
+           // }
+
+            function thirdModule(firstModule, secondModule){
+                return firstModule + " and " + secondModule + " and the third module";
+            }
+
+
+            //ThirdModuleFunction.$inject = ["FirstModuleFunction", "SecondModuleFunction"];
+
+            //ThirdModuleFunction.$get = function(){
+            //    return ThirdModuleFunction.apply(ThirdModuleFunction, arguments);
+            //}
+
+            modules.firstModule = firstModule;
+            modules.secondModule = secondModule;
+            modules.thirdModule = thirdModule;
+        });
+
+        it("should be able to provide factories with dependencies", function(){
+
+            Provide.factory("firstModule", modules.firstModule);
+            Provide.factory("secondModule", modules.secondModule);
+            Provide.factory("thirdModule", modules.thirdModule);
+
+            expect(RealInjector.moduleMap.firstModule).toBeDefined();
+            var firstModuleResult = RealInjector.get("firstModule");
+            expect(firstModuleResult).toEqual("The first module");
+            var secondModuleResult = RealInjector.get("secondModule");
+            expect(secondModuleResult).toEqual("The first module and the second module");
+            var thirdModuleResult = RealInjector.get("thirdModule");
+            expect(thirdModuleResult).toEqual("The first module and The first module and the second module and the third module");
+        });
+    })
     xit("should be able to provide components with dependencies and have the dependency relationships resolved", function(){
        Injector = require("../../src/new-injector.js");
-       Provide = new ProvideClass(Injector);
+
+
        Provide.service("engine", function(version){
           this.power = version === 1 ? 100 : 50;
           this.turnOn = function(){
               console.log("The engine is turned on, running at "+this.power);
           }
        });
+
        Provide.factory("version", function(){
            return 1;
        });
@@ -185,6 +186,8 @@ xdescribe("Provide", function(){
           return "This car is a " + car.make + " " + car.model + ". It belongs to "+car.owner;
        });
 
+
+       expect(Injector.moduleMap["engine"]).toBeDefined();
 
        var vehicle = Injector.get("vehicle");
        console.log(vehicle);
