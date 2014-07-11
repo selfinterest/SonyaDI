@@ -26,7 +26,7 @@ function Provide(Injector){
             }
 
             moduleFunction.$get = function(){
-                moduleFunction.resolved = true;
+                //moduleFunction.resolved = true;
                 return allTypes[type](moduleFunction, arguments);
             }
 
@@ -96,10 +96,24 @@ Provide.prototype.types.factory = function(moduleFunction, args){
 }
 
 Provide.prototype.types.service = function(moduleFunction, args){
+    function create(constructor, args){
+        var object = Object.create(constructor.prototype);
+        var result = constructor.apply(object, args);
+        if(typeof result === "object") {
+            return result;
+        } else {
+            return object;
+        }
+    }
+    return create(moduleFunction, args);
+    //var constructor = moduleFunction.bind.apply(moduleFunction, args);
+    //return new constructor;
 
-    return new moduleFunction(args);
 
+}
 
+Provide.prototype.types.value = function(moduleFunction){
+    return moduleFunction; //we don't execute it. Just return it. Value can have no dependencies.
 }
 
 Provide.prototype.types.class = function(moduleFunction, args){

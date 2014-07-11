@@ -67,23 +67,28 @@ Injector.prototype.get = function(moduleName){
     if(!this.moduleMap[moduleName]) throw new Error("Module "+moduleName+ " is not registered");
 
 
-    console.log("Getting: "+ moduleName);
+
 
     this.instantiate();
 
+
     var aModule = this.moduleMap[moduleName];
+
+    //If module is already resolved...
+    if(aModule._resolved) return aModule._resolved;
+
     var dependencyMap = {};
     var moduleDependencies = this.findAllModuleDependencies(moduleName);
     moduleDependencies = aModule.$inject;
-    console.log("This module's dependencies are: ");
-    console.log(moduleDependencies);
+
 
     moduleDependencies.forEach(function(dependencyName){
         dependencyMap[dependencyName] = this.moduleMap[dependencyName];
     }.bind(this));
+
     aModule.$get = this.resolve(aModule, dependencyMap);
 
-    return aModule.$get();
+    return aModule._resolved;
 
 
 }
@@ -97,16 +102,24 @@ Injector.prototype.get = function(moduleName){
 Injector.prototype.resolve = function(aModule, dependencyMap){
     var i, resolved = [];
 
-
-
+    if(typeof aModule !== "function") //aModule is a value
+    {
+        return aModule;
+    }
     aModule.$inject.forEach(function(dependencyName){
         var dependency = dependencyMap[dependencyName];
-        if(!dependency._resolved){
-            dependency.$get = this.resolve(dependency, dependencyMap);
-            dependency._resolved = dependency.$get();
+        if(typeof dependency === "undefined") throw new Error("Dependency "+dependencyName + " was not registered");
+        if(typeof dependency === "function"){
+            if(!dependency._resolved){
+                dependency.$get = this.resolve(dependency, dependencyMap);
+                dependency._resolved = dependency.$get();
+            }
+
+            aModule.$get = aModule.$get.bind(aModule, dependency._resolved);
+        } else {
+            aModule.$get = aModule.$get.bind(aModule, dependency);
         }
 
-        aModule.$get = aModule.$get.bind(aModule, dependency._resolved);
     }.bind(this));
 
 

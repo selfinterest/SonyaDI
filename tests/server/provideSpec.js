@@ -100,7 +100,7 @@ describe("Provide", function(){
 
     });
     describe("Tests with the real injector", function(){
-        var modules = {}, RealInjector
+        var modules = {}, RealInjector, services;
         beforeEach(function(){
             RealInjector = require("../../src/new-injector.js");
             RealInjector.clearModules();
@@ -141,6 +141,23 @@ describe("Provide", function(){
             modules.firstModule = firstModule;
             modules.secondModule = secondModule;
             modules.thirdModule = thirdModule;
+
+            services = {};
+            services.firstService = function(){
+                this.name = "Senea";
+                this.type = "cat";
+            }
+
+            services.secondService = function(){
+                this.name = "Kacy";
+                this.type = "dog";
+            }
+
+            services.petSitting = function(firstService, secondService){
+                this.firstPet = firstService;
+                this.secondPet = secondService;
+            }
+
         });
 
         it("should be able to provide factories with dependencies", function(){
@@ -157,7 +174,83 @@ describe("Provide", function(){
             var thirdModuleResult = RealInjector.get("thirdModule");
             expect(thirdModuleResult).toEqual("The first module and The first module and the second module and the third module");
         });
-    })
+
+        it("should be able to provide more factories with dependencies", function(){
+           modules.thirdModule = function(firstModule, secondModule, name){
+               return firstModule + " and " + secondModule + " and the third module and my name is " + name;
+           }
+
+            Provide.factory("name", function(){
+                return "Terrence";
+            });
+           Provide.factory("firstModule", modules.firstModule);
+
+           Provide.factory("thirdModule", modules.thirdModule);
+            Provide.factory("secondModule", modules.secondModule);
+
+           var thirdModuleResult = RealInjector.get("thirdModule");
+           expect(thirdModuleResult).toBe("The first module and The first module and the second module and the third module and my name is Terrence");
+
+
+        });
+
+        it("should be able to provide services with no dependencies", function(){
+            Provide.service("firstService", services.firstService);
+            Provide.service("secondService", services.secondService);
+            var firstResult = RealInjector.get("firstService");
+            expect(firstResult.name).toBe("Senea");
+            expect(firstResult.type).toBe("cat");
+            var secondResult = RealInjector.get("secondService");
+            expect(secondResult.name).toBe("Kacy");
+            expect(secondResult.type).toBe("dog");
+        });
+
+        it("should be able to provide services with dependencies", function(){
+            Provide.service("petSitting", services.petSitting);
+            Provide.service("firstService", services.firstService);
+            Provide.service("secondService", services.secondService);
+            var petSitting = RealInjector.get("petSitting");
+            expect(petSitting.firstPet.name).toBe("Senea");
+            expect(petSitting.secondPet.name).toBe("Kacy");
+        });
+
+        it("should be able to provide a value", function(){
+           Provide.value("version", 1);
+           Provide.service("engine", function(version){
+              if(version === 1){
+                  this.power = 100;
+              } else {
+                  this.power = 50;
+              }
+
+           });
+
+           var engine = RealInjector.get("engine");
+           expect(engine.power).toEqual(100);
+
+           Provide.value("version", 0);
+           var engine = RealInjector.get("engine");
+           expect(engine.power).toEqual(100); //this is the way dependency injection works
+           //RealInjector.clearModules();
+
+        });
+
+        it("should be able to provide a value", function(){
+            Provide.value("version", 0);
+            Provide.service("engine", function(version){
+                if(version === 1){
+                    this.power = 100;
+                } else {
+                    this.power = 50;
+                }
+
+            });
+            var engine = RealInjector.get("engine");
+            expect(engine.power).toEqual(50);
+        })
+
+
+    });
     xit("should be able to provide components with dependencies and have the dependency relationships resolved", function(){
        Injector = require("../../src/new-injector.js");
 
