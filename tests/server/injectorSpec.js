@@ -9,7 +9,7 @@ describe("New injector", function(){
     var Injector;
 
     beforeEach(function(){
-        Injector = require("../../src/injector.js")
+        Injector = require("../../lib/injector.js")
     });
 
     it("should exist", function(){
@@ -109,7 +109,7 @@ describe("New injector", function(){
 
     describe("Sophisticated DI tests", function(){
         var modules;
-        Injector = require("../../src/injector.js")
+        Injector = require("../../lib/injector.js")
         beforeEach(function(){
            modules = {};
             Injector.clearModules();

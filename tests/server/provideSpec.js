@@ -11,7 +11,7 @@ describe("Provide", function(){
     }
 
     beforeEach(function(){
-        ProvideClass = require("../../src/lib/provide-class.js");
+        ProvideClass = require("../../lib/lib/provide-class.js");
         Provide = new ProvideClass(Injector);
 
     });
@@ -102,7 +102,7 @@ describe("Provide", function(){
     describe("Tests with the real injector", function(){
         var modules = {}, RealInjector, services;
         beforeEach(function(){
-            RealInjector = require("../../src/injector.js");
+            RealInjector = require("../../lib/injector.js");
             RealInjector.clearModules();
             Provide = new ProvideClass(RealInjector);
             //modules = {};
@@ -252,7 +252,7 @@ describe("Provide", function(){
 
     });
     xit("should be able to provide components with dependencies and have the dependency relationships resolved", function(){
-       Injector = require("../../src/injector.js");
+       Injector = require("../../lib/injector.js");
 
 
        Provide.service("engine", function(version){
