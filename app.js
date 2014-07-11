@@ -1,47 +1,56 @@
 /**
  * Created by: Terrence C. Watson
- * Date: 6/29/14
- * Time: 10:53 PM
+ * Date: 7/11/14
+ * Time: 12:02 AM
  */
-
-var express = require("express")
-  , http = require("http")
-    , dependencyResolver = require("./src/dependencyResolver.js")
-    , Provider = require("./src/provider.js")
-  , angularLoader = require("./src/main.js");
+var sonya = require("./src");
 
 
+sonya.Provide.factory("version", function(){
+    return 1;
+});
 
+sonya.Provide.service("engine", function(version){
+    if(version === 1){
+        this.power = 100;
+    } else {
+        this.power = 50;
+    }
+});
 
-var app = express();
+sonya.Provide.factory("car", function(engine){
+   function Car(engine){
+    this.engine = engine;
+   }
 
-var angularRouteFunction = function(router){
-    router.get("/", function(req, res){
-        res.send("Angular route loaded.");
-    });
+   Car.prototype.turnOn = function(){
+       return "The car's engine revs with "+ this.engine.power + " horsepower!";
+   }
 
-    return router;
-}
-
-angularRouteFunction.dependencyNames = ["router"];
-
-dependencyResolver.resolve([
-    {name: "router", moduleFunction: require("./src/expressModule")},
-    {name: "angularRoute", moduleFunction: angularRouteFunction},
-    {name: "dummyModule", moduleFunction: function(){ return "dummy"}}
-]);
-
-
-app.use("/angular");
-app.use('/public', express.static(__dirname + '/public'));
-app.use('/tests', express.static(__dirname + "/tests/client"));
-
-
-app.get("/", function(req, res){
-    res.sendfile("./index.html");
+   return new Car(engine);
 });
 
 
+sonya.Provide.service("owner", function(car, name){
+    this.name = name;
+    this.car = car;
+    this.startCar = function(){
+        console.log(this.car.turnOn());
+        return "This car belongs to "+this.name;
+    }
 
-http.createServer(app).listen(4000);
+});
+
+sonya.Provide.value("name", "Terrence");
+
+//var version = sonya.Injector.get("version");
+var car = sonya.Injector.get("car");
+console.log(car.turnOn());
+
+var owner = sonya.Injector.get("owner");
+console.log(owner.startCar());
+
+//var car = sonya.Injector.get("car");
+
+//console.log(result);
 

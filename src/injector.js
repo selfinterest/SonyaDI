@@ -81,10 +81,10 @@ Injector.prototype.get = function(moduleName){
     var moduleDependencies = this.findAllModuleDependencies(moduleName);
     moduleDependencies = aModule.$inject;
 
-
     moduleDependencies.forEach(function(dependencyName){
         dependencyMap[dependencyName] = this.moduleMap[dependencyName];
     }.bind(this));
+
 
     aModule.$get = this.resolve(aModule, dependencyMap);
 
@@ -107,12 +107,14 @@ Injector.prototype.resolve = function(aModule, dependencyMap){
         return aModule;
     }
     aModule.$inject.forEach(function(dependencyName){
-        var dependency = dependencyMap[dependencyName];
+        //var dependency = this.moduleMap[dependencyName];
+        var dependency = dependencyMap[dependencyName] || this.moduleMap[dependencyName];
         if(typeof dependency === "undefined") throw new Error("Dependency "+dependencyName + " was not registered");
         if(typeof dependency === "function"){
             if(!dependency._resolved){
                 dependency.$get = this.resolve(dependency, dependencyMap);
                 dependency._resolved = dependency.$get();
+
             }
 
             aModule.$get = aModule.$get.bind(aModule, dependency._resolved);
