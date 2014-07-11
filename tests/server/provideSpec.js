@@ -217,6 +217,7 @@ describe("Provide", function(){
         it("should be able to provide a value", function(){
            Provide.value("version", 1);
            Provide.service("engine", function(version){
+               console.log("Making service");
               if(version === 1){
                   this.power = 100;
               } else {
@@ -238,6 +239,7 @@ describe("Provide", function(){
         it("should be able to provide a value", function(){
             Provide.value("version", 0);
             Provide.service("engine", function(version){
+                console.log("making service");
                 if(version === 1){
                     this.power = 100;
                 } else {

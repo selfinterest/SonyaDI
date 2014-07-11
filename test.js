@@ -1,6 +1,6 @@
 var sonya = require("./lib/main.js");
 sonya.Provide.factory("test", function(){
-
+console.log("in the factory");
 return "test";
 
 });
