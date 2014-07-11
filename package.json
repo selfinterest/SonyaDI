@@ -1,5 +1,6 @@
 {
   "name": "sonya",
+  "author": "Terrence C. Watson <terrence@primarydocuments.ca>",
   "version": "0.0.1",
   "main": "./lib/main.js",
   "description": "Super simple dependency injection for Node",
