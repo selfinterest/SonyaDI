@@ -3,7 +3,7 @@
  * Date: 7/6/14
  * Time: 5:42 PM
  */
-describe("Provide", function(){
+xdescribe("Provide", function(){
     var Provide, ProvideClass, Injector = {
         registerModule: function(){
             console.log("REGISTERING REGISTERING")
@@ -22,6 +22,7 @@ describe("Provide", function(){
     });
 
 
+
     xit("should be able to provide factories and other things to the injector", function(){
         function testFunction(){
 
@@ -30,15 +31,16 @@ describe("Provide", function(){
         spyOn(Injector, "registerModule").andCallThrough();
 
         var service = Provide.service("testService", testFunction);
+
         expect(Injector.registerModule).toHaveBeenCalledWith("testService", testFunction);
 
         var factory = Provide.factory("testFactory", testFunction);
         expect(Injector.registerModule).toHaveBeenCalledWith("testFactory", testFunction);
 
-        expect(service.$get).toBeDefined();
-        expect(service.$inject).toBeDefined();
-        expect(typeof service.$get).toBe("function");
-        expect(service.$inject.length).toBe(0);
+        expect(testFunction.$get).toBeDefined();
+        expect(typeof testFunction.$get).toBe("function");
+
+
 
         function AnimalFactory(animalName, animalType){
             return {
@@ -99,6 +101,7 @@ describe("Provide", function(){
         expect(senea.sound).toBe("meow");
 
     });
+
     describe("Tests with the real injector", function(){
         var modules = {}, RealInjector, services;
         beforeEach(function(){
@@ -160,6 +163,33 @@ describe("Provide", function(){
 
         });
 
+        it("should be able to register a factory with the injector, which can then be retrieved", function(){
+           function TestFunction(name){
+             this.name = name;
+           }
+
+           Provide.service("Test", TestFunction);
+           expect(RealInjector.moduleMap.Test).toBeDefined();
+
+           function TestFactory(){
+               return "Amala";
+           }
+
+           Provide.factory("TestFactory", TestFactory);
+           Provide.value("name", "Terrence");
+
+           expect(RealInjector.moduleMap.TestFactory).toBeDefined();
+           expect(RealInjector.moduleMap.TestFactory).toEqual(TestFactory);
+           expect(RealInjector.moduleMap.Test).toEqual(TestFunction);
+           var result = RealInjector.get("name");
+           expect(result).toBe("Terrence");
+           result = RealInjector.get("Test");
+           expect(result.name).toBe("Terrence");
+           result = RealInjector.get("TestFactory");
+           expect(result).toBe("Amala");
+
+        });
+
         it("should be able to provide factories with dependencies", function(){
 
             Provide.factory("firstModule", modules.firstModule);
@@ -167,7 +197,9 @@ describe("Provide", function(){
             Provide.factory("thirdModule", modules.thirdModule);
 
             expect(RealInjector.moduleMap.firstModule).toBeDefined();
+            console.log(RealInjector.moduleMap);
             var firstModuleResult = RealInjector.get("firstModule");
+
             expect(firstModuleResult).toEqual("The first module");
             var secondModuleResult = RealInjector.get("secondModule");
             expect(secondModuleResult).toEqual("The first module and the second module");
@@ -216,6 +248,7 @@ describe("Provide", function(){
 
         it("should be able to provide a value", function(){
            Provide.value("version", 1);
+
            Provide.service("engine", function(version){
                console.log("Making service");
               if(version === 1){
@@ -253,9 +286,18 @@ describe("Provide", function(){
 
 
     });
-    xit("should be able to provide components with dependencies and have the dependency relationships resolved", function(){
-       Injector = require("../../lib/injector.js");
 
+    it("should be able to register modules with the injector", function(){
+        Injector = require("../../lib/injector.js");
+        Provide = new ProvideClass(Injector);
+        Provide.service("bob", {});
+        //console.log(Injector);
+        expect(Injector.moduleMap.bob).toBeDefined();
+    });
+
+    it("should be able to provide components with dependencies and have the dependency relationships resolved", function(){
+       Injector = require("../../lib/injector.js");
+       Injector.clearModules();
 
        Provide.service("engine", function(version){
           this.power = version === 1 ? 100 : 50;
@@ -282,6 +324,7 @@ describe("Provide", function(){
        });
 
 
+       console.log(Injector.moduleMap);
        expect(Injector.moduleMap["engine"]).toBeDefined();
 
        var vehicle = Injector.get("vehicle");
