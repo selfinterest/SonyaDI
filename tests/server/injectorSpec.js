@@ -107,6 +107,81 @@ describe("New injector", function(){
         expect(AnotherTestModule._resolved).toEqual("The first module and the second module");
     });
 
+    it("should have a method to inject a function with a single dependency, a value", function(){
+       function TestFunction(name){
+        return name;
+       }
+       Injector.moduleMap.name = "Senea";
+       var newFunction = Injector.inject(TestFunction);
+       var result = newFunction();
+       expect(result).toBe("Senea");
+    });
+
+    it("should have a method to inject a function with dependencies, that if given a function with no dependencies, simply returns that function", function(){
+        function TestFunction(){
+            return "Senea";
+        }
+
+        var newFunction = Injector.inject(TestFunction);
+        var result = newFunction();
+        expect(result).toBe("Senea");
+    })
+
+    it("should have a method to inject a function with two dependencies, one another function", function(){
+       function TestFunction(saySomething, name){
+        return name + " says " + saySomething;
+       }
+
+       Injector.moduleMap.name = "Senea";
+       Injector.moduleMap.saySomething = function(){
+           return "Meow!"
+       }
+
+       var newFunction = Injector.inject(TestFunction);
+       var result = newFunction();
+       expect(result).toBe("Senea says Meow!");
+    });
+
+    it("should be able to inject a function with a dependency that itself has dependencies", function(){
+       function TestFunction(saySomething){
+            return saySomething;
+       }
+
+       Injector.moduleMap.saySomething = function(name){
+            return name + " says meow!";
+       }
+       Injector.moduleMap.name = "Senea";
+
+       var newFunction = Injector.inject(TestFunction);
+       var result = newFunction();
+       expect(result).toBe("Senea says meow!");
+    });
+
+    it("should be able to work with $get constructors", function(){
+       function TestFunction(name){
+           this.name = name;
+       }
+
+        TestFunction.$get = function(fn){
+            return new fn();
+        }
+
+       function FinalFunction(Test, name){
+           return name +"'s name is "+Test.name;
+       }
+
+       Injector.moduleMap.name = "Senea";
+       Injector.moduleMap.Test = TestFunction;
+
+
+       var newFunction = Injector.inject(FinalFunction);
+       var result = newFunction();
+       expect(result).toBe("Senea's name is Senea");
+
+    });
+
+
+
     describe("Sophisticated DI tests", function(){
         var modules;
         Injector = require("../../lib/injector.js")
