@@ -4,12 +4,241 @@
  * Time: 9:31 PM
  */
 
+describe("Injector service", function(){
+   var Injector;
 
-describe("New injector", function(){
+   beforeEach(function(){
+      Injector = require("../../lib/injector.js");
+      Injector.moduleMap = {};
+   });
+
+    it("should be able to register a module", function(){
+        Injector.registerModule("testModule", function(){});
+        expect(Injector.moduleMap.testModule).toBeDefined();
+    });
+
+    describe("annotate method", function(){
+        it("should be able to annotate a function with implicit dependencies", function(){
+            function Person(name){
+
+            }
+            var annotatedFunction = Injector.annotate(Person);
+            expect(annotatedFunction.$inject).toBeDefined();
+            expect(annotatedFunction.length).toBe(1);
+            expect(Array.isArray(annotatedFunction.$inject)).toBeTruthy();
+            function Person2(name, age){
+
+            }
+            annotatedFunction = Injector.annotate(Person2);
+            expect(annotatedFunction.$inject).toBeDefined();
+        });
+
+        it("should be able to annotate a function with explicit, Angular-style array dependencies", function(){
+            var fnArray = ["name", "age", function(n, a){
+
+            }];
+
+            var annotatedFunction = Injector.annotate(fnArray);
+            expect(typeof annotatedFunction).toBe("function");
+            expect(annotatedFunction.$inject).toBeDefined();
+            expect(annotatedFunction.$inject.length).toBe(2);
+            expect(annotatedFunction.$inject[0]).toBe("name");
+            expect(Array.isArray(annotatedFunction.$inject)).toBe(true);
+        });
+
+        it("should do nothing to a function that has an $inject property", function(){
+            function Person(name, age){
+
+            }
+            Person.$inject = ["name", "age"];
+            var annotatedFunction = Injector.annotate(Person);
+            expect(Person).toBe(annotatedFunction);
+        });
+
+        it("should provide an empty $inject array for functions with no dependencies", function(){
+            function Person(){
+
+            }
+            var annotatedFunction = Injector.annotate(Person);
+            expect(Person.$inject).toBeDefined();
+            expect(Person.$inject.length).toBe(0);
+            expect(Array.isArray(Person.$inject)).toBe(true);
+        });
+
+    });
+
+    describe("invoke method", function(){
+        it("should be able to execute a function after injecting dependencies", function(){
+           //Mock get function
+
+           Injector.get = function(name){
+               return this.invoke(this.moduleMap[name]);
+           }
+
+           function test(name){
+               return "Name is "+name;
+           }
+
+           Injector.moduleMap.name = "Terrence";
+           var result = Injector.invoke(test);
+           expect(result).toBe("Name is Terrence");
+           function test2(name, noise){
+                return "The cat's name is "+name+" and her noise is "+noise;
+           }
+           Injector.moduleMap.noise = "meow";
+           Injector.moduleMap.name = "Senea";
+           result = Injector.invoke(test2);
+           expect(result).toBe("The cat's name is Senea and her noise is meow");
+
+        });
+
+        it("should be able to execute a function after injecting dependencies and supplying additional arguments", function(){
+            Injector.get = function(name){
+                return this.moduleMap[name];
+            }
+            Injector.moduleMap.name = "Senea";
+            Injector.moduleMap.noise = "meow";
+
+            function test(age, name, noise){
+                return "The cat's name is " + name + " and she is " + age + " years old. " + noise + "!";
+            }
+
+            var result = Injector.invoke(test, test, {age: 5});
+            expect(result).toBe("The cat's name is Senea and she is 5 years old. meow!");
+        });
+
+        it("should throw an error if dependencies are missing", function(){
+
+           Injector.get = function(name){
+               return this.moduleMap[name];
+           };
+           Injector.moduleMap.name = "Senea";
+           Injector.moduleMap.noise = "meow";
+
+           function test(age, name, noise){
+
+           }
+           expect(function(){
+               Injector.invoke(test, test);
+           }).toThrow("Dependency age is not registered");
+
+        });
+
+    });
+
+    describe("instantiate method", function(){
+        Injector = require("../../lib/injector.js");
+
+        Injector.moduleMap = {};
+        Injector.moduleMap.name = {
+            $get: "Senea",
+            $invoke: function(){
+                return this.$get;
+            }
+        };
+        Injector.moduleMap.noise = {
+            $get: "meow!",
+            $invoke: function(){
+                return this.$get;
+            }
+        };
+
+        Injector.get = function(name){
+            return this.instantiate(this.moduleMap[name]);
+        };
+
+
+        Injector.moduleMap.catModule = {
+            $get: function(name, noise){
+                return name + " says " + noise;
+            },
+            $invoke: function(){
+                return this.$get();
+            }
+        }
+
+        var cat = Injector.instantiate(Injector.moduleMap.catModule);
+
+        expect(cat).toBe("Senea says meow!");
+    });
+
+    describe("inject method", function(){
+        var Injector;
+        beforeEach(function(){
+            Injector = require("../../lib/injector.js");
+            Injector.moduleMap = {};
+
+            Injector.get = function(name){
+                return this.moduleMap[name];
+            }
+        })
+
+
+        it("should be able to inject a function with no dependencies, simply returning that function", function(){
+            function test(){
+                return "Senea";
+            }
+            test.$inject = [];
+            var injected = Injector.inject(test);
+            expect(injected).toBeDefined();
+            expect(injected).toBe(test);
+            expect(injected()).toBe("Senea");
+        });
+
+        it("should be able to inject a function with a single dependency, a value", function(){
+           function test(name){
+            return name;
+           }
+           test.$inject = ["name"];
+           Injector.moduleMap.name = "Senea";
+           var injected = Injector.inject(test);
+           expect(injected.$inject[0]).toBe("Senea");
+
+        });
+
+        it("should be able to inject a function with a single dependency, a function", function(){
+           Injector.get = function(name){
+               return Injector.moduleMap[name]();
+           }
+           function test(name){
+               return name();
+           }
+           test.$inject = ["name"];
+           Injector.moduleMap.name = function(){ return "Senea"};
+           var injected = Injector.inject(test);
+           expect(injected.$inject[0]).toBe("Senea");
+        });
+
+        it("should be able to inject a function with multiple dependencies", function(){
+           Injector.get = function(name){
+               if(typeof Injector.moduleMap[name] == "function"){
+                   return Injector.moduleMap[name]();
+               } else {
+                   return Injector.moduleMap[name];
+               }
+           }
+
+           function test(name, noise){
+               return name + " goes " + noise;
+           }
+           Injector.moduleMap.name = "Senea";
+           Injector.moduleMap.noise = function(){ return "Meow!"};
+           test.$inject = ["name", "noise"];
+           var injected = Injector.inject(test);
+           expect(injected.$inject[0]).toBe("Senea");
+           expect(injected.$inject[1]).toBe("Meow!");
+        });
+
+
+    });
+
+});
+
+xdescribe("New injector", function(){
     var Injector;
 
     beforeEach(function(){
-        Injector = require("../../lib/injector.js")
+        Injector = require("../../lib/injector.js");
     });
 
     it("should exist", function(){
@@ -24,10 +253,12 @@ describe("New injector", function(){
        expect(Injector.registerModule).toBeDefined();
     });
 
-    it("should be able to register a module", function(){
-       Injector.registerModule("testModule", function(){});
-        expect(Injector.moduleMap.testModule).toBeDefined();
-    });
+
+
+
+
+
+
 
     it("should be able to get a preferred dependency resolution order", function(){
        function TestModuleFunction(){
@@ -113,7 +344,11 @@ describe("New injector", function(){
             function TestFunction(name){
                 return name;
             }
+
+            TestFunction.$inject = ["name"];
+
             Injector.moduleMap.name = "Senea";
+
             var newFunction = Injector.inject(TestFunction);
             var result = newFunction();
             expect(result).toBe("Senea");
@@ -355,7 +590,7 @@ describe("New injector", function(){
             expect(one.number).toEqual("one");
             var four = Injector.get("Four");
             expect(four.number).toEqual("one and two and three and four");
-            
+
         });
 
 
@@ -367,7 +602,7 @@ describe("New injector", function(){
 
     describe("Sophisticated DI tests", function(){
         var modules;
-        Injector = require("../../lib/injector.js")
+        Injector = require("../../lib/injector.js");
         beforeEach(function(){
            modules = {};
             Injector.clearModules();
@@ -443,20 +678,6 @@ describe("New injector", function(){
             expect(result()).toBe(resultShouldBe);
         });
 
-        it("should have a method for getting a registered service or factory", function(){
-            Injector
-                .registerModule("FirstModuleFunction", modules.firstModule)
-                .registerModule("SecondModuleFunction", modules.secondModule)
-                .registerModule("ThirdModuleFunction", modules.thirdModule);
-
-            var FirstModuleReturnValue = Injector.get("FirstModuleFunction");
-            expect(FirstModuleReturnValue).toBe("The first module");
-            var SecondModuleReturnValue = Injector.get("SecondModuleFunction");
-            expect(SecondModuleReturnValue).toBe("The first module and the second module");
-            var ThirdModuleReturnValue = Injector.get("ThirdModuleFunction");
-
-
-        });
     })
 
 
