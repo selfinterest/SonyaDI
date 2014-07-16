@@ -229,6 +229,119 @@ describe("Injector service", function(){
            expect(injected.$inject[1]).toBe("Meow!");
         });
 
+    });
+
+    describe("get method", function(){
+        var Injector, testModule, testModuleWithDependencies, testModuleWithComplexDependencies;
+        beforeEach(function(){
+            Injector = require("../../lib/injector.js");
+            //Restore the get function
+            Injector.get = Injector.__proto__.get;
+            Injector.moduleMap = {};
+            function testFunction(){
+                return "Senea";
+            }
+
+            testFunction.$inject = [];
+
+            testModule = {
+                $get: testFunction,
+                $invoke: function(){
+                    return this.$get();
+                }
+            }
+
+            Injector.moduleMap.test = testModule;
+
+            function testFunctionWithDependencies(name, age){
+                this.name = name;
+                this.age = age;
+            }
+
+            testFunctionWithDependencies.$inject = ["name", "age"];
+
+
+            testModuleWithDependencies = {
+                $get: testFunctionWithDependencies,
+                $invoke: function(){                //trying this one as a service
+                    return new this.$get();
+                }
+            }
+            var nameModule = {
+                $get: "Senea",
+                $invoke: function(){
+                    return this.$get;
+                }
+            }
+
+            var ageModule = {
+                $get: "12 years",
+                $invoke: function(){
+                    return this.$get;
+                }
+            }
+            Injector.moduleMap.testWithDependencies = testModuleWithDependencies;
+            Injector.moduleMap.name = nameModule;
+            Injector.moduleMap.age = ageModule;
+
+            function testFunctionWithComplexDependencies(name, makeNoise){
+                this.name = name;
+                this.makeNoise = makeNoise;
+            }
+
+
+            testModuleWithComplexDependencies = {
+                $get: testFunctionWithComplexDependencies,
+                $invoke: function(){
+                    return new this.$get();
+                }
+            }
+
+            var noiseModule = {
+                $get: "meow",
+                $invoke: function(){
+                    return this.$get;
+                }
+            }
+
+            var makeNoiseModule = {
+                $get: function(name, noise){
+                    return name + " goes " + noise;
+                },
+                $invoke: function(){
+                    return this.$get();
+                }
+            }
+
+            Injector.moduleMap.testWithComplexDependencies = testModuleWithComplexDependencies;
+            Injector.moduleMap.noise = noiseModule;
+            Injector.moduleMap.makeNoise = makeNoiseModule;
+
+
+        });
+
+        it("should throw an error if the module does not exist", function(){
+            expect(function(){
+                Injector.get("MODULEDOESNOTEXIST");
+            }).toThrow("Module MODULEDOESNOTEXIST is not registered.");
+        });
+
+        it("should be able to get an instantiated module by name, if that module has no dependencies", function(){
+           var test = Injector.get("test");     //I want these tests to be utterly simple
+           expect(test).toBe("Senea");
+        });
+
+        it("should be able to get an instantiated module by name, if that module has a two dependencies", function(){
+            var test = Injector.get("testWithDependencies");
+            expect(test.name).toBe("Senea");
+            expect(test.age).toBe("12 years");
+        });
+
+        it("should be able to get an instantiated module by name, if that module has a dependency that itself has a dependency", function(){
+            var test = Injector.get("testWithComplexDependencies");
+            expect(test.name).toBe("Senea");
+            expect(test.makeNoise).toBe("Senea goes meow");
+        });
 
     });
 
