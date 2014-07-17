@@ -1,19 +1,16 @@
 {
   "name": "sonya",
   "author": "Terrence C. Watson <terrence@primarydocuments.ca>",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "main": "./lib/main.js",
   "description": "Super simple dependency injection for Node",
   "repository": "https://github.com/selfinterest/SonyaDI",
+  "test": "grunt",
   "keywords": [
     "dependency injection"
   ],
   "dependencies": {
-    "extend": "^1.3.0",
-    "introspect": "0.0.3",
-    "toposort": "^0.2.10",
-    "underscore": "^1.6.0",
-    "utils-merge": "^1.0.0"
+    "introspect": "0.0.3"
   },
   "devDependencies": {
     "chai": "^1.9.1",
