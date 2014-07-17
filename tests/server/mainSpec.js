@@ -114,5 +114,40 @@ describe("main module test (integration)", function(){
 
     });
 
+    it("should pass this test", function(){
+        function one(){
+            return "one";
+        }
+
+        function two(one){
+            return one + " and two.";
+        }
+
+        function three(one){
+            return one + " and three.";
+        }
+
+        function numbers(one, two, three){
+            this.one = one;
+            this.two = two;
+            this.three = three;
+        }
+
+        sonya.Provide.factory("one", one);
+        sonya.Provide.factory("two", two);
+        sonya.Provide.factory("three", three);
+        sonya.Provide.service("numbers", numbers);
+
+        sonya.Injector.invoke(function(one, two, three, numbers){
+            expect(one).toBe("one");
+            expect(two).toBe("one and two.");
+            expect(three).toBe("one and three.");
+            expect(numbers.one).toBe("one");
+            expect(numbers.two).toBe("one and two.");
+            expect(numbers.three).toBe("one and three.");
+        });
+
+    })
+
 
 });
