@@ -46,3 +46,20 @@ sonya.Injector.invoke(function(one, two, three, numbers){
     expect(numbers.three).toBe("one and three.");
 });
 ```
+As simple as it is, Sonya is extensible. New providers can be added just by adding properties to provide-class's prototype. Example:
+
+```javascript
+var provideClass = require("sonya/lib/provide-class.js");
+provideClass.prototype.types.fromDirectory = function(){
+  //More code goes here
+
+}
+```
+
+Then, later in the application:
+
+```javascript
+var sonya = require("sonya");
+sonya.Provide.fromDirectory("./all_my_modules");
+```
+
