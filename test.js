@@ -1,15 +1,10 @@
+var providerClass = require("./lib/lib/provide-class.js");
+var path = require("path");
+
+
+providerClass.prototype.types.fromDirectory = function(dir){
+    console.log(path.resolve(dir));
+}
+
 var sonya = require("./lib/main.js");
-sonya.Provide.factory("test", function(){
-console.log("in the factory");
-return "test";
-
-});
-
-sonya.Provide.value("test2", "test2");
-
-var result = sonya.Injector.get("test");
-
-console.log(result);
-
-result = sonya.Injector.get("test2");
-console.log(result);
+sonya.Provide.fromDirectory("./");

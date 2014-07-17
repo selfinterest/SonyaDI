@@ -14,11 +14,12 @@ describe("Sonya Module class", function(){
       expect(sonyaModule instanceof SonyaModule).toBe(true);
    });
 
-   it("should throw an error if constructor is given improper parameters", function(){
+   it("should throw an error if constructor is given insufficient parameters", function(){
       expect(function(){
           var sonyaModule = SonyaModule();
-      }).toThrow("Must supply function");
+      }).toThrow("Must supply function or a provider object!");
    });
+
 
    describe("Sonya module", function(){
     var sonyaModule, TestFunction;

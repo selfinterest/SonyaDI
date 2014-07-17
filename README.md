@@ -32,10 +32,11 @@ function numbers(one, two, three){
     this.three = three;
 }
 
-sonya.Provide.factory("one", one);
-sonya.Provide.factory("two", two);
-sonya.Provide.factory("three", three);
-sonya.Provide.service("numbers", numbers);
+sonya.Provide
+  .factory("one", one);
+  .factory("two", two);
+  .factory("three", three);
+  .service("numbers", numbers);
 
 sonya.Injector.invoke(function(one, two, three, numbers){
     expect(one).toBe("one");
@@ -63,3 +64,7 @@ var sonya = require("sonya");
 sonya.Provide.fromDirectory("./all_my_modules");
 ```
 
+Tests
+-----
+
+You must have grunt installed. In module directory, just run "grunt".
