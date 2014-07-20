@@ -1,6 +1,5 @@
 Sonya
 =======================
-
 Very simple dependency injection for Node, inspired largely by [AngularJS](https://angularjs.org/).
 
 By design, Sonya is not meant to take over your application. This distinguishes it from other frameworks that use dependency injection but also have a lot of opinions on how you should organize or write your code.
@@ -64,7 +63,14 @@ var sonya = require("sonya");
 sonya.Provide.fromDirectory("./all_my_modules");
 ```
 
+Why Sonya?
+----------
+I started writing Sonya when I realized my client-side JavaScript was cleaner than my server-side JavaScript. And it wasn't just me. Working on a team, I realized the server code was almost always harder to understand, and quite a bit messier. After reading Robert Martin's clean code book, I realized cleanliness was an obligation -- and that I had to make it happen on the server as well as the client.
+
+Why was the client code cleaner? One reason was Angular. JavaScript is a highly expressive language, but that expressiveness can have a downside. Client-side, Angular, and specifically its implementation of dependency injection, tames some of JavaScript's inherent wildness. I wondered if I could tame server side JavaScript that way. But I didn't want to "re-create" Angular on the server. Instead, I sought to distill the Angular approach into two simple tools, a Provide module and an Injector module.
+
+As soon as I began using Sonya in my own projects, I noticed how much cleaned my code got. By utilizing chaining, dependencies can be registered in quick, self-documenting succession.
+
 Tests
 -----
-
 You must have grunt installed. In module directory, just run "grunt".
