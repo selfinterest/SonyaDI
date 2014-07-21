@@ -32,10 +32,12 @@ function numbers(one, two, three){
 }
 
 sonya.Provide
-  .factory("one", one);
-  .factory("two", two);
-  .factory("three", three);
-  .service("numbers", numbers);
+  .factory("one", one)
+  .factory("two", two)
+  .factory("three", three)
+  .service("numbers", numbers)
+  ;
+
 
 sonya.Injector.invoke(function(one, two, three, numbers){
     expect(one).toBe("one");
@@ -46,30 +48,13 @@ sonya.Injector.invoke(function(one, two, three, numbers){
     expect(numbers.three).toBe("one and three.");
 });
 ```
-As simple as it is, Sonya is extensible. New providers can be added just by adding properties to provide-class's prototype. Example:
-
-```javascript
-var provideClass = require("sonya/lib/provide-class.js");
-provideClass.prototype.types.fromDirectory = function(){
-  //More code goes here
-
-}
-```
-
-Then, later in the application:
-
-```javascript
-var sonya = require("sonya");
-sonya.Provide.fromDirectory("./all_my_modules");
-```
+As simple as it is, Sonya is extensible. New providers can be easily added to extend its capabilities. For an example, see my [sonya-from-directory](https://www.npmjs.org/package/sonya-from-directory) module.
 
 Why Sonya?
 ----------
-I started writing Sonya when I realized my client-side JavaScript was cleaner than my server-side JavaScript. And it wasn't just me. Working on a team, I realized the server code was almost always harder to understand, and quite a bit messier. After reading Robert Martin's clean code book, I realized cleanliness was an obligation -- and that I had to make it happen on the server as well as the client.
+I started writing Sonya when I realized my client-side JavaScript was cleaner than my server-side JavaScript. And it wasn't just me. Working on a team, I found the server code was almost always harder to understand, and quite a bit messier. After reading Robert Martin's [clean code book](http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882), I realized cleanliness was an obligation -- and that I had to make it happen on the server as well as the client.
 
 Why was the client code cleaner? One reason was Angular. JavaScript is a highly expressive language, but that expressiveness can have a downside. Client-side, Angular, and specifically its implementation of dependency injection, tames some of JavaScript's inherent wildness. I wondered if I could tame server side JavaScript that way. But I didn't want to "re-create" Angular on the server. Instead, I sought to distill the Angular approach into two simple tools, a Provide module and an Injector module.
-
-As soon as I began using Sonya in my own projects, I noticed how much cleaned my code got. By utilizing chaining, dependencies can be registered in quick, self-documenting succession.
 
 Tests
 -----
