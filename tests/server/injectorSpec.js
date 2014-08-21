@@ -3,12 +3,12 @@
  * Date: 7/3/14
  * Time: 9:31 PM
  */
-
+var Q = require("q");
 describe("Injector service", function(){
    var Injector;
 
    beforeEach(function(){
-      Injector = require("../../lib/injector.js");
+      Injector = require("../../lib/injector.js")();
       Injector.moduleMap = {};
    });
 
@@ -126,8 +126,53 @@ describe("Injector service", function(){
 
     });
 
+    describe("invokeSync method", function(){
+        it("should operate normally with factories that don't return promises", function(done){
+            function factoryOne(){
+                return "one";
+            }
+
+            Injector.get = function(name){
+                return this.moduleMap[name]();
+            };
+
+            Injector.moduleMap.factoryOne = factoryOne;
+
+            Injector.invokeSync(function(factoryOne){
+                expect(factoryOne).toBe("one");
+                done();
+            });
+
+
+
+
+        });
+
+        it("should resolve promises before invoking function", function(done){
+           function factoryOne(){
+               return Q.delay(2000).then(function(){
+                   return "Test"
+               });
+           }
+
+           Injector.get = function(name){
+               return this.moduleMap[name];
+           }
+
+            Injector.moduleMap.factoryOne = factoryOne;
+
+            Injector.invokeSync(function(factoryOne){
+
+                expect(factoryOne).toBe("Test");
+                done();
+            });
+        });
+
+
+    });
+
     describe("instantiate method", function(){
-        Injector = require("../../lib/injector.js");
+        Injector = require("../../lib/injector.js")();
 
         Injector.moduleMap = {};
         Injector.moduleMap.name = {
@@ -165,7 +210,7 @@ describe("Injector service", function(){
     describe("inject method", function(){
         var Injector;
         beforeEach(function(){
-            Injector = require("../../lib/injector.js");
+            Injector = require("../../lib/injector.js")();
             Injector.moduleMap = {};
 
             Injector.get = function(name){
@@ -216,7 +261,7 @@ describe("Injector service", function(){
                } else {
                    return Injector.moduleMap[name];
                }
-           }
+           };
 
            function test(name, noise){
                return name + " goes " + noise;
@@ -234,7 +279,7 @@ describe("Injector service", function(){
     describe("get method", function(){
         var Injector, testModule, testModuleWithDependencies, testModuleWithComplexDependencies;
         beforeEach(function(){
-            Injector = require("../../lib/injector.js");
+            Injector = require("../../lib/injector.js")();
             //Restore the get function
             Injector.get = Injector.__proto__.get;
             Injector.moduleMap = {};
@@ -621,7 +666,8 @@ xdescribe("New injector", function(){
             expect(result.number).toBe("one and two and three and four");
 
         });
-    })
+    });
+
 
 
     it("should have a function to get a factory/service by name", function(){

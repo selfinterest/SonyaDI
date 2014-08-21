@@ -1,7 +1,7 @@
 {
   "name": "sonya",
   "author": "Terrence C. Watson <terrence@primarydocuments.ca>",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "main": "./lib/main.js",
   "description": "Super simple dependency injection for Node",
   "repository": "https://github.com/selfinterest/SonyaDI",
@@ -10,7 +10,8 @@
     "dependency injection"
   ],
   "dependencies": {
-    "introspect": "0.0.3"
+    "introspect": "0.0.3",
+    "q": "^1.0.1"
   },
   "devDependencies": {
     "chai": "^1.9.1",
