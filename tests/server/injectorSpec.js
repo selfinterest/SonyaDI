@@ -168,8 +168,8 @@ describe("Injector service", function(){
             });
         });
 
-
     });
+
 
     describe("instantiate method", function(){
         Injector = require("../../lib/injector.js")();
