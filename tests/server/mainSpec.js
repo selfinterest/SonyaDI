@@ -156,14 +156,14 @@ describe("main module test (integration)", function(){
 
         sonya.Provide.factory("one", oneFactory);
 
-        var injectedFunction = sonya.Injector.bind(function(one){
-            return one + " and two";
+        var injectedFunction = sonya.Injector.bind(function(one, test){
+            return one + " and two and " + test;
         });
 
         console.log(injectedFunction);
 
-        var result = injectedFunction();
-        expect(result).toBe("one and two");
+        var result = injectedFunction("test");
+        expect(result).toBe("one and two and test");
     })
 
 });

@@ -366,9 +366,10 @@ describe("Injector service", function(){
         });
 
         it("should throw an error if the module does not exist", function(){
-            expect(function(){
-                Injector.get("MODULEDOESNOTEXIST");
-            }).toThrow("Module MODULEDOESNOTEXIST is not registered.");
+            //expect(function(){
+                var result = Injector.get("MODULEDOESNOTEXIST");
+                expect(result).toBe(null);
+            //}).toThrow("Module MODULEDOESNOTEXIST is not registered.");
         });
 
         it("should be able to get an instantiated module by name, if that module has no dependencies", function(){
