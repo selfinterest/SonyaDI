@@ -10,6 +10,7 @@
     "dependency injection"
   ],
   "dependencies": {
+    "change-case": "^2.1.3",
     "introspect": "0.0.3",
     "q": "^1.0.1"
   },

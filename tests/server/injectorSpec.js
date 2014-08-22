@@ -150,7 +150,7 @@ describe("Injector service", function(){
 
         it("should resolve promises before invoking function", function(done){
            function factoryOne(){
-               return Q.delay(2000).then(function(){
+               return Q.delay(100).then(function(){
                    return "Test"
                });
            }
@@ -167,6 +167,36 @@ describe("Injector service", function(){
                 done();
             });
         });
+
+    });
+
+    describe("bindSync method", function(){
+       it("should be able to bind a function that returns a promise", function(done){
+           function factoryOne(){
+               return Q.delay(100).then(function(){
+                   return "Test";
+               });
+
+           }
+
+           Injector.get = function(name){
+               return this.moduleMap[name];
+           };
+
+           Injector.moduleMap.factoryOne = factoryOne;
+
+           var fn = Injector.bindSync(function(factoryOne, someOtherArgument){
+            console.log(arguments);
+            expect(factoryOne).toBe("Test");
+            expect(someOtherArgument).toBe("test again");
+            done();
+            //return factoryOne + " " + someOtherArgument;
+           });
+
+           var result = fn("test again");
+           console.log(result);
+
+       });
 
     });
 
@@ -368,7 +398,7 @@ describe("Injector service", function(){
         it("should throw an error if the module does not exist", function(){
             //expect(function(){
                 var result = Injector.get("MODULEDOESNOTEXIST");
-                expect(result).toBe(null);
+                expect(result).toBeUndefined;
             //}).toThrow("Module MODULEDOESNOTEXIST is not registered.");
         });
 

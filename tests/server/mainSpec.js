@@ -164,6 +164,20 @@ describe("main module test (integration)", function(){
 
         var result = injectedFunction("test");
         expect(result).toBe("one and two and test");
-    })
+    });
+
+    it("should also pass this test", function(done){
+       function oneFactory(){
+           return "one";
+       }
+
+       sonya.Provide.factory("one", oneFactory);
+       sonya.Injector.invoke(function(one, q){
+           q.delay(200).then(function(){
+               expect(one).toBe("one");
+               done();
+           });
+       });
+    });
 
 });
