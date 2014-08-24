@@ -17,6 +17,8 @@ describe("Injector service", function(){
         expect(Injector.moduleMap.testModule).toBeDefined();
     });
 
+
+
     describe("annotate method", function(){
         it("should be able to annotate a function with implicit dependencies", function(){
             function Person(name){
@@ -170,6 +172,28 @@ describe("Injector service", function(){
 
     });
 
+    describe("bind method", function(){
+       it("should be able to bind a function with dependencies", function(done){
+           function factoryOne(){
+               return "one";
+           }
+
+           Injector.get = function(name){
+               if(this.moduleMap[name]) return this.moduleMap[name]();
+           }
+
+           Injector.moduleMap.one = factoryOne;
+
+           var fn = Injector.bind(function(one, two){
+               expect(one).toBe("one");
+               expect(two).toBe("two");
+               done();
+           });
+
+           fn("two");
+       });
+    });
+
     describe("bindSync method", function(){
        it("should be able to bind a function that returns a promise", function(done){
            function factoryOne(){
@@ -194,7 +218,7 @@ describe("Injector service", function(){
            });
 
            var result = fn("test again");
-           console.log(result);
+           //console.log(result);
 
        });
 

@@ -180,4 +180,51 @@ describe("main module test (integration)", function(){
        });
     });
 
+    it("binding and rebinding integration test", function(done){
+       function oneFactory(){
+           return "one";
+       }
+
+        sonya.Provide.factory("one", oneFactory);
+        var counter = 0;
+        var fn = sonya.Injector.bind(function(one, test){
+            if(counter == 0){
+                expect(one).toBe("one");
+                expect(test).toBe("two");
+                counter++;
+            } else {
+                expect(one).toBe("two");
+                expect(test).toBe("three");
+                done();
+            }
+
+
+        });
+
+        fn("two");
+        //Try rebinding
+        function twoFactory(){
+            return "two";
+        }
+
+
+        sonya.Provide.factory("one", twoFactory);
+        fn.rebind();
+        fn("three");
+
+    });
+
+
+
+    it("should be able to instantiate multiple injectors", function(){
+        var newSonya = sonya();
+        expect(newSonya.Injector).toBeDefined();
+        expect(newSonya.Provide).toBeDefined();
+        expect(newSonya.Injector === sonya.Injector).toBe(false);
+        newSonya.Provide.factory("someFactory", function(){ return "someFactory";});
+        expect(newSonya.Injector.moduleMap["someFactory"]).toBeDefined();
+        expect(sonya.Injector.moduleMap["someFactory"]).not.toBeDefined();
+
+    });
+
 });
