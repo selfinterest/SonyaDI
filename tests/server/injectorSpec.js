@@ -210,7 +210,7 @@ describe("Injector service", function(){
            Injector.moduleMap.factoryOne = factoryOne;
 
            var fn = Injector.bindSync(function(factoryOne, someOtherArgument){
-            console.log(arguments);
+            //console.log(arguments);
             expect(factoryOne).toBe("Test");
             expect(someOtherArgument).toBe("test again");
             done();

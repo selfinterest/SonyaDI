@@ -160,7 +160,7 @@ describe("main module test (integration)", function(){
             return one + " and two and " + test;
         });
 
-        console.log(injectedFunction);
+
 
         var result = injectedFunction("test");
         expect(result).toBe("one and two and test");
