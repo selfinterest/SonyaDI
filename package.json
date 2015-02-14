@@ -1,7 +1,7 @@
 {
   "name": "sonya",
   "author": "Terrence C. Watson <terrence@primarydocuments.ca>",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "main": "./lib/main.js",
   "description": "Super simple dependency injection for Node",
   "repository": "https://github.com/selfinterest/SonyaDI",
@@ -18,7 +18,6 @@
     "chai": "^1.9.1",
     "grunt": "^0.4.5",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-debug-task": "^0.1.5",
     "grunt-jasmine-node": "^0.2.1"
   }
 }
