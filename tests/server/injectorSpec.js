@@ -131,7 +131,7 @@ describe("Injector service", function(){
     describe("invokeSync method", function(){
         it("should operate normally with factories that don't return promises", function(done){
             function factoryOne(){
-                return "one";
+                return "no promise here.";
             }
 
             Injector.get = function(name){
@@ -141,7 +141,7 @@ describe("Injector service", function(){
             Injector.moduleMap.factoryOne = factoryOne;
 
             Injector.invokeSync(function(factoryOne){
-                expect(factoryOne).toBe("one");
+                expect(factoryOne).toBe("no promise here.");
                 done();
             });
 
@@ -150,22 +150,45 @@ describe("Injector service", function(){
 
         });
 
-        it("should resolve promises before invoking function", function(done){
+        it("should also operate normally with factories that RETURN functions", function(done){
            function factoryOne(){
+               return function(){
+                   return "one";
+               }
+           }
+
+            Injector.get = function(name){
+                return this.moduleMap[name]();
+            };
+
+            Injector.moduleMap.factoryOne = factoryOne;
+
+            Injector.invokeSync(function(factoryOne){
+               expect(typeof factoryOne).toBe("function");
+               expect(factoryOne()).toBe("one");
+               done();
+            });
+        });
+
+        it("should resolve promises before invoking function", function(done){
+           function factoryPromise(){
+
                return Q.delay(100).then(function(){
                    return "Test"
                });
            }
 
+            factoryPromise.$resolvePromise = true;
+
            Injector.get = function(name){
-               return this.moduleMap[name];
-           }
+               return this.moduleMap[name]();
+           };
 
-            Injector.moduleMap.factoryOne = factoryOne;
+            Injector.moduleMap.factoryPromise = factoryPromise;
 
-            Injector.invokeSync(function(factoryOne){
+            Injector.invokeSync(function(factoryPromise){
 
-                expect(factoryOne).toBe("Test");
+                expect(factoryPromise).toBe("Test");
                 done();
             });
         });
@@ -847,13 +870,27 @@ xdescribe("New injector", function(){
 
             ThirdModuleFunction.$get = function(){
                 return ThirdModuleFunction.apply(ThirdModuleFunction, arguments);
+            };
+
+            function FourthModuleFunction(firstModule){
+                return function(){
+                    return "Some thing " + firstModule;
+                }
             }
+
+            FourthModuleFunction.$inject = ["FirstModuleFunction"];
+
 
             modules.firstModule = FirstModuleFunction;
             modules.secondModule = SecondModuleFunction;
             modules.thirdModule = ThirdModuleFunction;
+            modules.fourthModule = FourthModuleFunction;
         });
 
+
+        it("should have a method to resolve a module's dependencies", function(){
+
+        });
 
         it("should have a method to resolve a module with two dependencies", function(){
             /*function FirstModuleFunction(){
